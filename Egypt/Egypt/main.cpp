@@ -12,6 +12,7 @@
 #include "core/model/pyramid/pyramid.h"
 #include "core/camera/camera.hpp"
 #include "core/renderer/renderer.hpp"
+#include "core/model/quad/quad.hpp"
 
 const int WindowWidth = 1270;
 const int WindowHeight = 720;
@@ -114,11 +115,14 @@ int main() {
 
     Shader Basic("shaders/basic.vert", "shaders/basic.frag");
 
+    Quad ground;
     Pyramid pyr;
 
     Renderer renderer;
     renderer.m_FramebufferSize = glm::vec2(WindowWidth, WindowHeight);
+    
     renderer.m_Renderables.push_back(&pyr);
+    renderer.m_Renderables.push_back(&ground);
     renderer.m_CurrRenderable = renderer.m_Renderables[0];
     renderer.m_ScalingFactor = 1.0f;
 
@@ -138,7 +142,7 @@ int main() {
     glViewport(0, 0, renderer.m_FramebufferSize.x, renderer.m_FramebufferSize.y);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
-    //glCullFace(GL_BACK);
+    glEnable(GL_CULL_FACE);
     float FrameStartTime = glfwGetTime();
     float FrameEndTime = glfwGetTime();
     float dt = FrameEndTime - FrameStartTime;
@@ -147,6 +151,7 @@ int main() {
         glClearColor(0.0, 1.0, 1.0, 1.0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         FrameStartTime = glfwGetTime();
+        State.m_Renderer->Reset();
 
         if (PressedKeys[GLFW_KEY_W] || PressedKeys[GLFW_KEY_S] || PressedKeys[GLFW_KEY_D] || PressedKeys[GLFW_KEY_A])
             Camera.CalculateMoveDirection(PressedKeys, dt);
@@ -155,14 +160,31 @@ int main() {
         FreeView = glm::lookAt(Camera.m_Position, Camera.m_Position + Camera.m_Front, Camera.m_Up);
         Basic.SetView(FreeView);
 
-
-        
         
         ModelMatrix = glm::mat4(1.0f);
-        ModelMatrix = glm::translate(ModelMatrix, glm::vec3(0.0f, 0.0f, -2.0f));
+        ModelMatrix = glm::translate(ModelMatrix, glm::vec3(5.0f, 2.7f, -10.0f));
+        ModelMatrix = glm::scale(ModelMatrix, glm::vec3(10.0f));
         Basic.SetModel(ModelMatrix);
-        State.m_Renderer->m_CurrRenderable->Render();
+        State.m_Renderer->RenderCurrent();
 
+        ModelMatrix = glm::mat4(1.0f);
+        ModelMatrix = glm::translate(ModelMatrix, glm::vec3(8.0f, 4.0f, 12.0f));
+        ModelMatrix = glm::scale(ModelMatrix, glm::vec3(15.0f));
+        Basic.SetModel(ModelMatrix);
+        State.m_Renderer->RenderCurrent();
+
+        ModelMatrix = glm::mat4(1.0f);
+        ModelMatrix = glm::translate(ModelMatrix, glm::vec3(-4.0f, 2.7f, -9.0f));
+        ModelMatrix = glm::scale(ModelMatrix, glm::vec3(10.0f));
+        Basic.SetModel(ModelMatrix);
+        State.m_Renderer->RenderCurrent();
+        
+        ModelMatrix = glm::mat4(1.0f);
+        ModelMatrix = glm::translate(ModelMatrix, glm::vec3(0.0f, -0.3f, 0.0f));
+        ModelMatrix = glm::scale(ModelMatrix, glm::vec3(100.0f, 1.0f, 100.0f));
+        Basic.SetModel(ModelMatrix);
+        State.m_Renderer->RenderNext();
+        
         glUseProgram(0);
         glfwSwapBuffers(Window);
         FrameEndTime = glfwGetTime();

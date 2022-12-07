@@ -145,6 +145,8 @@
     <ClCompile Include="core\model\buffer\buffer.cpp" />
     <ClCompile Include="core\model\pyramid\pyramid.cpp" />
     <ClCompile Include="core\model\pyramid\pyramid_buffer.cpp" />
+    <ClCompile Include="core\model\quad\quad.cpp" />
+    <ClCompile Include="core\model\quad\quad_buffer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="core\model\mesh.cpp" />
     <ClCompile Include="core\model\model.cpp" />
@@ -163,6 +165,8 @@
     <ClInclude Include="core\model\buffer\ibufferable.hpp" />
     <ClInclude Include="core\model\pyramid\pyramid.h" />
     <ClInclude Include="core\model\pyramid\pyramid_buffer.hpp" />
+    <ClInclude Include="core\model\quad\quad.hpp" />
+    <ClInclude Include="core\model\quad\quad_buffer.hpp" />
     <ClInclude Include="core\renderer\irenderable.hpp" />
     <ClInclude Include="core\renderer\renderer.hpp" />
     <ClInclude Include="core\shader.hpp" />
