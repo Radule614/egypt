@@ -143,6 +143,8 @@
   <ItemGroup>
     <ClCompile Include="core\camera\camera.cpp" />
     <ClCompile Include="core\model\buffer\buffer.cpp" />
+    <ClCompile Include="core\model\cube\cube.cpp" />
+    <ClCompile Include="core\model\cube\cubebuffer.cpp" />
     <ClCompile Include="core\model\pyramid\pyramid.cpp" />
     <ClCompile Include="core\model\pyramid\pyramid_buffer.cpp" />
     <ClCompile Include="core\model\quad\quad.cpp" />
@@ -156,9 +158,13 @@
     <None Include="packages.config" />
     <None Include="shaders\basic.frag" />
     <None Include="shaders\basic.vert" />
+    <None Include="shaders\light.frag" />
+    <None Include="shaders\light.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\camera\camera.hpp" />
+    <ClInclude Include="core\model\cube\cube.hpp" />
+    <ClInclude Include="core\model\cube\cubebuffer.hpp" />
     <ClInclude Include="core\model\mesh.hpp" />
     <ClInclude Include="core\model\model.hpp" />
     <ClInclude Include="core\model\buffer\buffer.hpp" />
@@ -168,6 +174,7 @@
     <ClInclude Include="core\model\quad\quad.hpp" />
     <ClInclude Include="core\model\quad\quad_buffer.hpp" />
     <ClInclude Include="core\renderer\irenderable.hpp" />
+    <ClInclude Include="core\renderer\material.hpp" />
     <ClInclude Include="core\renderer\renderer.hpp" />
     <ClInclude Include="core\shader.hpp" />
   </ItemGroup>

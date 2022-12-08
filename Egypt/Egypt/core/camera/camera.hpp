@@ -41,7 +41,7 @@ public:
      * @param worldUp - World Up vector
      * @param target - Point in space the camera's looking at
      */
-    OrbitalCamera(float fov, glm::vec3 position, float distance, float rotateSpeed = 10.0f, float zoomSpeed = 10.0f, const glm::vec3 &worldUp = glm::vec3(0.0f, 1.0f, 0.0f), const glm::vec3 &target = glm::vec3(0.0f));
+    OrbitalCamera(float fov, glm::vec3 position, float distance, const glm::vec3& target = glm::vec3(0.0f), float rotateSpeed = 10.0f, float zoomSpeed = 10.0f, const glm::vec3 &worldUp = glm::vec3(0.0f, 1.0f, 0.0f));
 
     /**
      * @brief Rotates the camera

@@ -4,6 +4,7 @@
 #include <fstream>
 #include <GL/glew.h>
 #include <glm/glm.hpp>
+#include "renderer/material.hpp"
 
 class Shader {
 public:
@@ -53,6 +54,14 @@ public:
      * @param m Projection matrix
      */
     void SetProjection(const glm::mat4& m) const;
+    
+    void SetVec3(const std::string&, const glm::vec3&) const;
+    void SetVec3(const std::string&, float, float, float) const;
+    void SetFloat(const std::string&, float) const;
+
+    void SetMaterial(const std::string&, Material) const;
+    void SetPointLight(const std::string&, PointLight) const;
+    void SetDirectionalLight(const std::string&, DirectionalLight) const;
 private:
     unsigned mId;
 

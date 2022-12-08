@@ -26,6 +26,41 @@ void Shader::SetProjection(const glm::mat4& m) const {
     SetUniform4m("uProjection", m);
 }
 
+void Shader::SetVec3(const std::string& uniform, const glm::vec3& v) const {
+    glUniform3fv(glGetUniformLocation(mId, uniform.c_str()), 1, &v[0]);
+}
+
+void Shader::SetVec3(const std::string& uniform, float x, float y, float z) const {
+    SetVec3(uniform, glm::vec3(x, y, z));
+}
+
+void Shader::SetFloat(const std::string& uniform, float x) const {
+    glUniform1f(glGetUniformLocation(mId, uniform.c_str()), x);
+}
+
+void Shader::SetMaterial(const std::string& uniform, Material material) const {
+    SetVec3(uniform + ".ambient", material.ambient);
+    SetVec3(uniform + ".diffuse", material.diffuse);
+    SetVec3(uniform + ".specular", material.specular);
+    SetFloat(uniform + ".shininess", material.shininess);
+}
+void Shader::SetPointLight(const std::string& uniform, PointLight light) const {
+    SetVec3(uniform + ".position", light.position);
+    SetVec3(uniform + ".ambient", light.ambient);
+    SetVec3(uniform + ".diffuse", light.diffuse);
+    SetVec3(uniform + ".specular", light.specular);
+    SetFloat(uniform + ".constant", light.constant);
+    SetFloat(uniform + ".linear", light.linear);
+    SetFloat(uniform + ".quadratic", light.quadratic);
+}
+
+void Shader::SetDirectionalLight(const std::string& uniform, DirectionalLight light) const {
+    SetVec3(uniform + ".direction", light.direction);
+    SetVec3(uniform + ".ambient", light.ambient);
+    SetVec3(uniform + ".diffuse", light.diffuse);
+    SetVec3(uniform + ".specular", light.specular);
+}
+
 unsigned
 Shader::GetId() const {
     return mId;

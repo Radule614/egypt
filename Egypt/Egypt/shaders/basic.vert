@@ -9,9 +9,12 @@ uniform mat4 uModel;
 
 out vertex_out {
 	vec3 FragNormal;
+	vec3 FragPos;
 } VertexOut;
 
 void main() {
+	vec4 pos = uModel * vec4(aPos, 1.0f);
+	gl_Position = uProjection * uView * pos;
 	VertexOut.FragNormal = aNormal;
-	gl_Position = uProjection * uView * uModel * vec4(aPos, 1.0f);
+	VertexOut.FragPos = vec3(pos);
 }

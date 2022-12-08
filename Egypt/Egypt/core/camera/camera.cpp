@@ -3,7 +3,7 @@
 #include <GLFW/glfw3.h>
 
 
-OrbitalCamera::OrbitalCamera(float fov, glm::vec3 position, float distance, float rotateSpeed, float zoomSpeed, const glm::vec3 &worldUp, const glm::vec3 &target)
+OrbitalCamera::OrbitalCamera(float fov, glm::vec3 position, float distance, const glm::vec3& target, float rotateSpeed, float zoomSpeed, const glm::vec3 &worldUp)
     : m_WorldUp(worldUp),
       m_Target(target)  {
     m_FOV = fov;
@@ -15,7 +15,7 @@ OrbitalCamera::OrbitalCamera(float fov, glm::vec3 position, float distance, floa
     m_Yaw = -90.0f;
     m_Pitch = 0.0f;
     m_Position = position;
-    m_Velocity = 10.0f;
+    m_Velocity = 30.0f;
 
     m_Front = glm::normalize(m_Target - m_Position);
     updateVectors();
@@ -83,7 +83,7 @@ void OrbitalCamera::CalculateDirection(float& xoffset, float& yoffset)
     direction.y = sin(glm::radians(m_Pitch));
     direction.z = sin(glm::radians(m_Yaw)) * cos(glm::radians(m_Pitch));
     m_Front = glm::normalize(direction);
-    //std::cout << m_Front.x << ", " << m_Front.y << ", " << m_Front.z << << std::endl;
+    //std::cout << m_Front.x << ", " << m_Front.y << ", " << m_Front.z << std::endl;
     updateVectors();
 }
 
