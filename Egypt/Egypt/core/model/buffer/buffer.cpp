@@ -17,6 +17,9 @@ Buffer::Buffer(IBufferable& bufferable) : mEBO(0) {
     glVertexAttribPointer(NORMAL_LOCATION, 3, GL_FLOAT, GL_FALSE, Stride, (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(NORMAL_LOCATION);
 
+    glVertexAttribPointer(TEXCOORD_LOCATION, 2, GL_FLOAT, GL_FALSE, Stride, (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(TEXCOORD_LOCATION);
+
     if (mIndexCount) {
         glGenBuffers(1, &mEBO);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEBO);

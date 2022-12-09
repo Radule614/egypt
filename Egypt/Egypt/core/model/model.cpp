@@ -1,5 +1,4 @@
 #include "model.hpp"
-#include "texture.hpp"
 
 using namespace std;
 

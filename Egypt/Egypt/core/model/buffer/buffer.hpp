@@ -16,6 +16,7 @@
 
 #define POSITION_LOCATION 0
 #define NORMAL_LOCATION 1
+#define TEXCOORD_LOCATION 2
 
 class Buffer {
 private:

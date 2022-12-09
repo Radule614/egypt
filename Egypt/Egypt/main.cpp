@@ -7,6 +7,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <iostream>
+#include "core/model/texture.hpp"
 #include "core/shader.hpp"
 #include "core/model/model.hpp"
 #include "core/model/pyramid/pyramid.hpp"
@@ -23,6 +24,8 @@ const float TargetFPS = 100.0f;
 const float TargetFrameTime = 1.0f / TargetFPS;
 std::map<unsigned int, bool> PressedKeys;
 
+int NormalMapsEnabled = 0;
+
 struct EngineState {
     OrbitalCamera* m_Camera;
     Renderer* m_Renderer;
@@ -37,6 +40,9 @@ static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, i
     switch (key) {
         case GLFW_KEY_ESCAPE: glfwSetWindowShouldClose(window, GLFW_TRUE); break;
     }
+
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+        NormalMapsEnabled = (NormalMapsEnabled + 1) % 2;
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
         PressedKeys[GLFW_KEY_W] = true;
@@ -140,8 +146,16 @@ int main() {
     Cube LightModel;
     Model Carpet("assets/carpet/carpet.obj");
 
-    Material PyrMaterial = { glm::vec3(0.76f, 0.6f, 0.37f), glm::vec3(0.76f, 0.6f, 0.37f), glm::vec3(0.4f, 0.4f, 0.3f), 128.0f };
-    Material SandMaterial = { glm::vec3(0.95f, 0.82f, 0.46f), glm::vec3(0.95f, 0.82f, 0.46f), glm::vec3(0.4f, 0.3f, 0.1f), 128.0f };
+    Material PyrMaterial = { glm::vec3(0.04f, 0.04f, 0.1f), glm::vec3(0.6f, 0.6f, 0.3f), glm::vec3(0.3f, 0.3f, 0.2f), 128.0f };
+    Material SandMaterial = { glm::vec3(0.04f, 0.04f, 0.0f), glm::vec3(0.4f, 0.4f, 0.2f), glm::vec3(0.3f, 0.3f, 0.2f), 128.0f };
+
+    unsigned int SandDiffuseTextureId = LoadTextureFromFile("sand.jpg", "assets/sand/");
+    unsigned int SandSpecularTextureId = LoadTextureFromFile("specular.jpg", "assets/sand/");
+    unsigned int SandNormalTextureId = LoadTextureFromFile("normal.jpg", "assets/sand/");
+
+    unsigned int BrickDiffuseTextureId = LoadTextureFromFile("brick.jpg", "assets/brick/");
+    unsigned int BrickSpecularTextureId = LoadTextureFromFile("specular.jpg", "assets/brick/");
+    unsigned int BrickNormalTextureId = LoadTextureFromFile("normal.jpg", "assets/brick/");
 
     Renderer Renderer;
     Renderer.m_FramebufferSize = glm::vec2(WindowWidth, WindowHeight);
@@ -156,10 +170,8 @@ int main() {
     glm::mat4 ModelMatrix(1.0f);
     glm::mat4 FreeView = glm::lookAt(Camera.m_Position, Camera.m_Position + Camera.m_Front, Camera.m_Up);
     glm::mat4 Perspective = glm::perspective(45.0f, Renderer.m_FramebufferSize.x / (float)Renderer.m_FramebufferSize.y, 0.1f, RenderDistance);
-    glUseProgram(BasicShader.GetId());
-    BasicShader.SetProjection(Perspective);
 
-    DirectionalLight moonLight = { glm::normalize(glm::vec3(-1.0f, -0.3f, 0.5f)), glm::vec3(0.01f, 0.01f, 0.03f), glm::vec3(0.2f, 0.2f, 0.9f), glm::vec3(0.2f, 0.2f, 0.7f) };
+    DirectionalLight MoonLight = { glm::normalize(glm::vec3(-1.0f, -0.3f, 0.5f)), glm::vec3(0.01f, 0.01f, 0.02f), glm::vec3(0.03f, 0.03f, 0.05f), glm::vec3(0.04f, 0.04f, 0.2f) };
     std::vector<PointLight> PointLights { 
         { glm::vec3(17.0f, 5.5f, 6.0f), glm::vec3(1.0f, 1.0f, 0.0f) },
         { glm::vec3(7.0f, 5.5f, -17.0f), glm::vec3(0.4f, 1.0f, 0.0f) },
@@ -169,15 +181,18 @@ int main() {
         { glm::vec3(-12.0f, 5.5f, -12.0f), glm::vec3(0.2f, 0.7f, 1.0f) }
     };
 
+    glUseProgram(BasicShader.GetId());
+    BasicShader.SetProjection(Perspective);
     for(int i = 0; i < PointLights.size(); i++)
         BasicShader.SetPointLight("pointLights[" + std::to_string(i) + "]", PointLights[i]);
-    
-    BasicShader.SetDirectionalLight("directionalLight", moonLight);
+    BasicShader.SetDirectionalLight("directionalLight", MoonLight);
     
     glUseProgram(LightShader.GetId());
     LightShader.SetProjection(Perspective);
     
     glUseProgram(0);
+
+    
 
     float Carpet_X = 0.0f;
     float Carpet_Y = 2.0f;
@@ -188,6 +203,7 @@ int main() {
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     glEnable(GL_CULL_FACE);
+    //glEnable(GL_FRAMEBUFFER_SRGB);
     float FrameStartTime = glfwGetTime();
     float FrameEndTime = glfwGetTime();
     float dt = FrameEndTime - FrameStartTime;
@@ -213,18 +229,44 @@ int main() {
         BasicShader.SetVec3("cameraPos", Camera.m_Position);
         BasicShader.SetInt("useTexture", 0);
         
-        Renderer.RenderPyramid(BasicShader, glm::vec3(18.0f, 0.0f, -25.0f), glm::vec3(26.0f));
-        Renderer.RenderPyramid(BasicShader, glm::vec3(26.0f, 0.0f, 24.0f), glm::vec3(32.0f));
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, BrickDiffuseTextureId);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, BrickSpecularTextureId);
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_2D, BrickNormalTextureId);
+        BasicShader.SetInt("texture_diffuse1", 0);
+        BasicShader.SetInt("texture_specular1", 1);
+        BasicShader.SetInt("texture_normal1", 2);
+        BasicShader.SetInt("useTexture", 1);
+        BasicShader.SetInt("useNormalMap", NormalMapsEnabled);
+        Renderer.RenderPyramid(BasicShader, glm::vec3(18.0f, 0.0f, -25.0f), glm::vec3(26.0f), -25.0f);
+        Renderer.RenderPyramid(BasicShader, glm::vec3(26.0f, 0.0f, 24.0f), glm::vec3(32.0f), 45.0f);
         Renderer.RenderPyramid(BasicShader, glm::vec3(-30.0f, 0.0f, -4.0f), glm::vec3(24.0f));
-        
+        glActiveTexture(GL_TEXTURE0);
+        BasicShader.SetInt("useNormalMap", 0);
+
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, SandDiffuseTextureId);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, SandSpecularTextureId);
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_2D, SandNormalTextureId);
+        BasicShader.SetInt("texture_diffuse1", 0);
+        BasicShader.SetInt("texture_specular1", 1);
+        BasicShader.SetInt("texture_normal1", 2);
         ModelMatrix = glm::mat4(1.0f);
         ModelMatrix = glm::scale(ModelMatrix, glm::vec3(150.0f, 1.0f, 150.0f));
         BasicShader.SetModel(ModelMatrix);
         BasicShader.SetMaterial("material", SandMaterial);
+        BasicShader.SetInt("useTexture", 1);
+        BasicShader.SetInt("useNormalMap", NormalMapsEnabled);
         GroundModel.Render();
+        glActiveTexture(GL_TEXTURE0);
+        BasicShader.SetInt("useNormalMap", 0);
 
         ModelMatrix = glm::mat4(1.0f);
-        ModelMatrix = glm::translate(ModelMatrix, glm::vec3(Carpet_X, 2.0f + 0.4*sin(CurrentFrame * 0.05), Carpet_Z));
+        ModelMatrix = glm::translate(ModelMatrix, glm::vec3(Carpet_X, 2.0f + 0.4 * sin(CurrentFrame * 0.05), Carpet_Z));
         BasicShader.SetModel(ModelMatrix);
         BasicShader.SetInt("useTexture", 1);
         Carpet.Render(BasicShader);
@@ -236,7 +278,7 @@ int main() {
             Renderer.RenderPointLight(LightModel, PointLights[i], LightShader);
 
         ModelMatrix = glm::mat4(1.0f);
-        ModelMatrix = glm::translate(ModelMatrix, -50.0f * moonLight.direction);
+        ModelMatrix = glm::translate(ModelMatrix, -50.0f * MoonLight.direction);
         ModelMatrix = glm::translate(ModelMatrix, Camera.m_Position);
         ModelMatrix = glm::scale(ModelMatrix, glm::vec3(3.0f));
         LightShader.SetVec3("lightColor", glm::vec3(0.65f, 0.65f, 0.8f));

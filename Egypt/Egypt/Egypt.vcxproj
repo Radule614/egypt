@@ -152,6 +152,7 @@
     <ClCompile Include="core\model\quad\quad.cpp" />
     <ClCompile Include="core\model\quad\quad_buffer.cpp" />
     <ClCompile Include="core\model\std_image.cpp" />
+    <ClCompile Include="core\model\texture.cpp" />
     <ClCompile Include="core\renderer\renderer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="core\shader.cpp" />

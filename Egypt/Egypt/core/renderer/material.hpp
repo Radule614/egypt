@@ -27,9 +27,9 @@ struct PointLight {
 		ambient = color;
 		diffuse = color;
 		specular = color;
-		constant = 0.4f;
-		linear = 0.08f;
-		quadratic = 0.04f;
+		constant = 0.04f;
+		linear = 0.05f;
+		quadratic = 0.06f;
 	}
 
 	PointLight(glm::vec3 pos, glm::vec3 a, glm::vec3 d, glm::vec3 s, float x, float y, float z) {

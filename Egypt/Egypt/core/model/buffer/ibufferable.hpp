@@ -21,6 +21,6 @@ public:
 		return 0;
 	};
 	virtual unsigned GetVertexElementCount() {
-		return 6;
+		return 8;
 	};
 };
