@@ -1,51 +1,32 @@
-/**
- * @file mesh.hpp
- * @author Jovan Ivosevic
- * @brief Model mesh, a renderable piece of a model
- * @version 0.1
- * @date 2022-10-09
- *
- * @copyright Copyright (c) 2022
- *
- */
-
 #pragma once
 
-#include <GL/glew.h>
-#include <assimp/scene.h>
-#include<vector>
+#include <glm/glm.hpp>
+#include <string>
+#include <vector>
+#include "../shader.hpp"
+
+struct Vertex {
+    glm::vec3 Position;
+    glm::vec3 Normal;
+    glm::vec2 TexCoords;
+};
+
+struct Texture {
+    unsigned int id;
+    std::string type;
+    std::string path;
+};
 
 class Mesh {
 public:
-    /**
-     * @brief Ctor - buffers mesh data
-     *
-     * @param mesh - Assimp mesh
-     * @param MeshMaterial - Assimp material
-     * @param resPath - Resource relative path. For loading textures, etc...
-     * 
-     */
-    Mesh(const aiMesh* mesh, aiMaterial* MeshMaterial, const std::string& resPath);
+    std::vector<Vertex>       vertices;
+    std::vector<unsigned int> indices;
+    std::vector<Texture>      textures;
 
-    /**
-     * @brief Renders the mesh
-     *
-     */
-    void Render() const;
+    Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
+    void Render(Shader& shader);
 private:
-    unsigned mVAO;
-    unsigned mVBO;
-    unsigned mEBO;
-    unsigned mIndicesCount;
-    unsigned mVerticesCount;
+    unsigned int VAO, VBO, EBO;
 
-    /**
-     * @brief Buffers mesh data into GL
-     * 
-     * @param mesh Assimp mesh struct
-     * @param MeshMaterial Assimp material struct
-     * @param resPath Resource path, used for loading textures
-     * 
-     */
-    void processMesh(const aiMesh* mesh, aiMaterial* MeshMaterial, const std::string& resPath);
+    void SetupMesh();
 };

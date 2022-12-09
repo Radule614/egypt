@@ -38,6 +38,11 @@ void Shader::SetFloat(const std::string& uniform, float x) const {
     glUniform1f(glGetUniformLocation(mId, uniform.c_str()), x);
 }
 
+void Shader::SetInt(const std::string& uniform, int i) const
+{
+    glUniform1i(glGetUniformLocation(mId, uniform.c_str()), i);
+}
+
 void Shader::SetMaterial(const std::string& uniform, Material material) const {
     SetVec3(uniform + ".ambient", material.ambient);
     SetVec3(uniform + ".diffuse", material.diffuse);

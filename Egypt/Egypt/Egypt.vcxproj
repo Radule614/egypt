@@ -145,13 +145,15 @@
     <ClCompile Include="core\model\buffer\buffer.cpp" />
     <ClCompile Include="core\model\cube\cube.cpp" />
     <ClCompile Include="core\model\cube\cubebuffer.cpp" />
+    <ClCompile Include="core\model\mesh.cpp" />
+    <ClCompile Include="core\model\model.cpp" />
     <ClCompile Include="core\model\pyramid\pyramid.cpp" />
     <ClCompile Include="core\model\pyramid\pyramid_buffer.cpp" />
     <ClCompile Include="core\model\quad\quad.cpp" />
     <ClCompile Include="core\model\quad\quad_buffer.cpp" />
+    <ClCompile Include="core\model\std_image.cpp" />
+    <ClCompile Include="core\renderer\renderer.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="core\model\mesh.cpp" />
-    <ClCompile Include="core\model\model.cpp" />
     <ClCompile Include="core\shader.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -165,14 +167,16 @@
     <ClInclude Include="core\camera\camera.hpp" />
     <ClInclude Include="core\model\cube\cube.hpp" />
     <ClInclude Include="core\model\cube\cubebuffer.hpp" />
-    <ClInclude Include="core\model\mesh.hpp" />
-    <ClInclude Include="core\model\model.hpp" />
     <ClInclude Include="core\model\buffer\buffer.hpp" />
     <ClInclude Include="core\model\buffer\ibufferable.hpp" />
-    <ClInclude Include="core\model\pyramid\pyramid.h" />
+    <ClInclude Include="core\model\mesh.hpp" />
+    <ClInclude Include="core\model\model.hpp" />
+    <ClInclude Include="core\model\pyramid\pyramid.hpp" />
     <ClInclude Include="core\model\pyramid\pyramid_buffer.hpp" />
     <ClInclude Include="core\model\quad\quad.hpp" />
     <ClInclude Include="core\model\quad\quad_buffer.hpp" />
+    <ClInclude Include="core\model\stb_image.hpp" />
+    <ClInclude Include="core\model\texture.hpp" />
     <ClInclude Include="core\renderer\irenderable.hpp" />
     <ClInclude Include="core\renderer\material.hpp" />
     <ClInclude Include="core\renderer\renderer.hpp" />

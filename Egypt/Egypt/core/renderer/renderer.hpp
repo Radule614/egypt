@@ -1,32 +1,18 @@
 #pragma once
-#include "irenderable.hpp"
-#include "../model/model.hpp"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include "../shader.hpp"
+#include "../model/pyramid/pyramid.hpp"
 
 class Renderer {
 public:
-    unsigned m_CurrRenderableIdx;
-    IRenderable* m_CurrRenderable;
-    std::vector<IRenderable*> m_Renderables;
     glm::vec2 m_FramebufferSize;
-    float m_ScalingFactor;
 
-    void Reset() {
-        if (m_Renderables.size() == 0) 
-            return;
-        m_CurrRenderableIdx = 0;
-        m_CurrRenderable = m_Renderables[0];
-    }
+    Material m_PyramidMaterial;
+    Pyramid m_PyramidModel;
 
-    void RenderNext() {
-        if (m_Renderables.size() <= m_CurrRenderableIdx + 1) 
-            return;
-        
-        m_CurrRenderableIdx += 1;
-        m_CurrRenderable = m_Renderables[m_CurrRenderableIdx];
-        m_CurrRenderable->Render();
-    }
-
-    void RenderCurrent() {
-        m_CurrRenderable->Render();
-    }
+    Material m_SandMaterial;
+    
+    void RenderPointLight(IRenderable& model, PointLight& light, Shader& shader);
+    void RenderPyramid(Shader& shader, glm::vec3 position, glm::vec3 scale);
 };

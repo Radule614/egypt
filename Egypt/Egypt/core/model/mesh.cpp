@@ -1,66 +1,64 @@
 #include "mesh.hpp"
 
-Mesh::Mesh(const aiMesh* mesh, aiMaterial* MeshMaterial, const std::string& resPath)
-    : mVerticesCount(0), mIndicesCount(0){
-    processMesh(mesh, MeshMaterial, resPath);
+using namespace std;
+
+Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures)
+{
+    this->vertices = vertices;
+    this->indices = indices;
+    this->textures = textures;
+
+    SetupMesh();
 }
 
-void
-Mesh::Render() const {
-    glBindVertexArray(mVAO);
-    if(mIndicesCount) {
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEBO);
-        glDrawElements(GL_TRIANGLES, mIndicesCount, GL_UNSIGNED_INT, (void*)0);
-        glBindVertexArray(mVAO);
-        return;
+void Mesh::Render(Shader& shader)
+{
+    unsigned int diffuseNr = 1;
+    unsigned int specularNr = 1;
+    for (unsigned int i = 0; i < textures.size(); i++)
+    {
+        glActiveTexture(GL_TEXTURE0 + i);
+        string number;
+        string name = textures[i].type;
+        if (name == "texture_diffuse")
+            number = std::to_string(diffuseNr++);
+        else if (name == "texture_specular")
+            number = std::to_string(specularNr++);
+
+        shader.SetInt(("material." + name + number).c_str(), i);
+        glBindTexture(GL_TEXTURE_2D, textures[i].id);
     }
-    glDrawArrays(GL_TRIANGLES, 0, mVerticesCount);
+    glActiveTexture(GL_TEXTURE0);
+
+    glBindVertexArray(VAO);
+    glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
 }
 
-void
-Mesh::processMesh(const aiMesh* mesh, aiMaterial* MeshMaterial, const std::string& resPath) {
-    const aiVector3D Zero3D(0.0f, 0.0f, 0.0f);
-    std::vector<float> Vertices;
-    for (unsigned VertexIndex = 0; VertexIndex < mesh->mNumVertices; ++VertexIndex) {
-        std::vector<float> Position = { mesh->mVertices[VertexIndex].x, mesh->mVertices[VertexIndex].y, mesh->mVertices[VertexIndex].z };
-        Vertices.insert(Vertices.end(), Position.begin(), Position.end());
-        aiColor4D Color = { 1.0f, 1.0f, 1.0f, 1.0f };
-        // NOTE(Jovan): If material isn't being rendered properly
-        // comment out the line below
-        aiGetMaterialColor(MeshMaterial, AI_MATKEY_COLOR_DIFFUSE, &Color); // <-- This one
-        std::vector<float> VertexColor = { Color.r, Color.g, Color.b };
-        Vertices.insert(Vertices.end(), VertexColor.begin(), VertexColor.end());
-    }
+void Mesh::SetupMesh()
+{
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+    glGenBuffers(1, &EBO);
 
-    mVerticesCount = Vertices.size();
+    glBindVertexArray(VAO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-    glGenVertexArrays(1, &mVAO);
-    glGenBuffers(1, &mVBO);
-    glBindVertexArray(mVAO);
-    glBindBuffer(GL_ARRAY_BUFFER, mVBO);
-    glBufferData(GL_ARRAY_BUFFER, mVerticesCount * sizeof(float), Vertices.data(), GL_STATIC_DRAW);
-    float Stride = 6 * sizeof(float);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, Stride, (void*)0);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int),
+        &indices[0], GL_STATIC_DRAW);
+
+
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, Stride, (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+
     glEnableVertexAttribArray(1);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
 
-    std::vector<unsigned> Indices;
-    for (unsigned FaceIndex = 0; FaceIndex < mesh->mNumFaces; ++FaceIndex) {
-        const aiFace& Face = mesh->mFaces[FaceIndex];
-        Indices.push_back(Face.mIndices[0]);
-        Indices.push_back(Face.mIndices[1]);
-        Indices.push_back(Face.mIndices[2]);
-    }
-    mIndicesCount = Indices.size();
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
 
-    if (mIndicesCount) {
-        glGenBuffers(1, &mEBO);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEBO);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, Indices.size() * sizeof(float), Indices.data(), GL_STATIC_DRAW);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    }
     glBindVertexArray(0);
 }

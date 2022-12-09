@@ -9,7 +9,7 @@
 #include <iostream>
 #include "core/shader.hpp"
 #include "core/model/model.hpp"
-#include "core/model/pyramid/pyramid.h"
+#include "core/model/pyramid/pyramid.hpp"
 #include "core/camera/camera.hpp"
 #include "core/renderer/renderer.hpp"
 #include "core/model/quad/quad.hpp"
@@ -54,6 +54,23 @@ static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, i
         PressedKeys[GLFW_KEY_A] = true;
     else
         PressedKeys[GLFW_KEY_A] = false;
+
+    if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+        PressedKeys[GLFW_KEY_LEFT] = true;
+    else
+        PressedKeys[GLFW_KEY_LEFT] = false;
+    if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+        PressedKeys[GLFW_KEY_RIGHT] = true;
+    else
+        PressedKeys[GLFW_KEY_RIGHT] = false;
+    if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+        PressedKeys[GLFW_KEY_UP] = true;
+    else
+        PressedKeys[GLFW_KEY_UP] = false;
+    if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+        PressedKeys[GLFW_KEY_DOWN] = true;
+    else
+        PressedKeys[GLFW_KEY_DOWN] = false;
 }
 
 float lastX = WindowWidth / 2.0;
@@ -118,39 +135,43 @@ int main() {
     Shader BasicShader("shaders/basic.vert", "shaders/basic.frag");
     Shader LightShader("shaders/light.vert", "shaders/light.frag");
 
-    Quad ground;
-    Pyramid pyr;
-    Cube lightModel;
+    Quad GroundModel;
+    Pyramid PyramidModel;
+    Cube LightModel;
+    Model Carpet("assets/carpet/carpet.obj");
 
-    Renderer renderer;
-    renderer.m_FramebufferSize = glm::vec2(WindowWidth, WindowHeight);
+    Material PyrMaterial = { glm::vec3(0.76f, 0.6f, 0.37f), glm::vec3(0.76f, 0.6f, 0.37f), glm::vec3(0.4f, 0.4f, 0.3f), 128.0f };
+    Material SandMaterial = { glm::vec3(0.95f, 0.82f, 0.46f), glm::vec3(0.95f, 0.82f, 0.46f), glm::vec3(0.4f, 0.3f, 0.1f), 128.0f };
 
-    renderer.m_Renderables.push_back(&pyr);
-    renderer.m_Renderables.push_back(&ground);
-    renderer.m_Renderables.push_back(&lightModel);
-    renderer.m_CurrRenderable = renderer.m_Renderables[0];
-    renderer.m_ScalingFactor = 1.0f;
-    State.m_Renderer = &renderer;
+    Renderer Renderer;
+    Renderer.m_FramebufferSize = glm::vec2(WindowWidth, WindowHeight);
+    Renderer.m_PyramidModel = PyramidModel;
+    Renderer.m_PyramidMaterial = PyrMaterial;
+    Renderer.m_SandMaterial = SandMaterial;
+
+    State.m_Renderer = &Renderer;
     State.m_Camera = &Camera;
     
     float RenderDistance = 200.0f;
     glm::mat4 ModelMatrix(1.0f);
     glm::mat4 FreeView = glm::lookAt(Camera.m_Position, Camera.m_Position + Camera.m_Front, Camera.m_Up);
-    glm::mat4 Perspective = glm::perspective(45.0f, renderer.m_FramebufferSize.x / (float)renderer.m_FramebufferSize.y, 0.1f, RenderDistance);
+    glm::mat4 Perspective = glm::perspective(45.0f, Renderer.m_FramebufferSize.x / (float)Renderer.m_FramebufferSize.y, 0.1f, RenderDistance);
     glUseProgram(BasicShader.GetId());
     BasicShader.SetProjection(Perspective);
 
-    Material pyrMaterial = { glm::vec3(0.76f, 0.6f, 0.37f), glm::vec3(0.76f, 0.6f, 0.37f), glm::vec3(0.4f, 0.4f, 0.3f), 64.0f };
-    Material sandMaterial = { glm::vec3(0.95f, 0.82f, 0.66f), glm::vec3(0.95f, 0.82f, 0.66f), glm::vec3(0.4f, 0.3f, 0.1f), 48.0f };
-    DirectionalLight moonLight = { glm::normalize(glm::vec3(-1.0f, -0.3f, 0.5f)), glm::vec3(0.03f, 0.03f, 0.08f), glm::vec3(0.2f, 0.2f, 0.3f), glm::vec3(0.3f, 0.3f, 0.5f) };
+    DirectionalLight moonLight = { glm::normalize(glm::vec3(-1.0f, -0.3f, 0.5f)), glm::vec3(0.01f, 0.01f, 0.03f), glm::vec3(0.2f, 0.2f, 0.9f), glm::vec3(0.2f, 0.2f, 0.7f) };
+    std::vector<PointLight> PointLights { 
+        { glm::vec3(17.0f, 5.5f, 6.0f), glm::vec3(1.0f, 1.0f, 0.0f) },
+        { glm::vec3(7.0f, 5.5f, -17.0f), glm::vec3(0.4f, 1.0f, 0.0f) },
+        { glm::vec3(-30.0f, 18.0f, -4.0f), glm::vec3(1.0f, 0.2f, 0.0f) },
+        { glm::vec3(-12.0f, 5.5f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f) },
+        { glm::vec3(-12.0f, 5.5f, 12.0f), glm::vec3(0.8f, 0.4f, 1.0f) },
+        { glm::vec3(-12.0f, 5.5f, -12.0f), glm::vec3(0.2f, 0.7f, 1.0f) }
+    };
+
+    for(int i = 0; i < PointLights.size(); i++)
+        BasicShader.SetPointLight("pointLights[" + std::to_string(i) + "]", PointLights[i]);
     
-    PointLight pointLight_0 = { glm::vec3(17.0f, 5.0f, 6.0f), glm::vec3(1.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 0.0f), 0.4f, 0.08f, 0.04f };
-    PointLight pointLight_1 = { glm::vec3(5.0f, 5.0f, -14.0f), glm::vec3(0.4f, 1.0f, 0.0f), glm::vec3(0.4f, 1.0f, 0.0f), glm::vec3(0.0f, 4.0f, 0.0f), 0.4f, 0.08f, 0.04f };
-    PointLight pointLight_2 = { glm::vec3(-30.0f, 18.0f, -4.0f), glm::vec3(1.0f, 0.2f, 0.0f), glm::vec3(1.0f, 0.2f, 0.0f), glm::vec3(1.0f, 0.2f, 0.0f), 0.4f, 0.08f, 0.04f};
-    
-    BasicShader.SetPointLight("pointLights[0]", pointLight_0);
-    BasicShader.SetPointLight("pointLights[1]", pointLight_1);
-    BasicShader.SetPointLight("pointLights[2]", pointLight_2);
     BasicShader.SetDirectionalLight("directionalLight", moonLight);
     
     glUseProgram(LightShader.GetId());
@@ -158,7 +179,12 @@ int main() {
     
     glUseProgram(0);
 
-    glViewport(0, 0, renderer.m_FramebufferSize.x, renderer.m_FramebufferSize.y);
+    float Carpet_X = 0.0f;
+    float Carpet_Y = 2.0f;
+    float Carpet_Z = 0.0f;
+    int CurrentFrame = 0;
+
+    glViewport(0, 0, Renderer.m_FramebufferSize.x, Renderer.m_FramebufferSize.y);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     glEnable(GL_CULL_FACE);
@@ -170,64 +196,44 @@ int main() {
         glClearColor(0, 0.07, 0.15, 1.0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         FrameStartTime = glfwGetTime();
-        State.m_Renderer->Reset();
-
         if (PressedKeys[GLFW_KEY_W] || PressedKeys[GLFW_KEY_S] || PressedKeys[GLFW_KEY_D] || PressedKeys[GLFW_KEY_A])
             Camera.CalculateMoveDirection(PressedKeys, dt);
+        if (PressedKeys[GLFW_KEY_LEFT])
+            Carpet_X -= 50.0f * dt;
+        if (PressedKeys[GLFW_KEY_RIGHT])
+            Carpet_X += 50.0f * dt;
+        if (PressedKeys[GLFW_KEY_UP])
+            Carpet_Z -= 50.0f * dt;
+        if (PressedKeys[GLFW_KEY_DOWN])
+            Carpet_Z += 50.0f * dt;
         
         glUseProgram(BasicShader.GetId());
         FreeView = glm::lookAt(Camera.m_Position, Camera.m_Position + Camera.m_Front, Camera.m_Up);
         BasicShader.SetView(FreeView);
         BasicShader.SetVec3("cameraPos", Camera.m_Position);
-        BasicShader.SetMaterial("material", pyrMaterial);
+        BasicShader.SetInt("useTexture", 0);
         
-        ModelMatrix = glm::mat4(1.0f);
-        ModelMatrix = glm::translate(ModelMatrix, glm::vec3(18.0f, 0.0f, -25.0f));
-        ModelMatrix = glm::scale(ModelMatrix, glm::vec3(26.0f));
-        BasicShader.SetModel(ModelMatrix);
-        State.m_Renderer->RenderCurrent();
-
-        ModelMatrix = glm::mat4(1.0f);
-        ModelMatrix = glm::translate(ModelMatrix, glm::vec3(26.0f, 0.0f, 24.0f));
-        ModelMatrix = glm::scale(ModelMatrix, glm::vec3(32.0f));
-        BasicShader.SetModel(ModelMatrix);
-        State.m_Renderer->RenderCurrent();
-
-        ModelMatrix = glm::mat4(1.0f);
-        ModelMatrix = glm::translate(ModelMatrix, glm::vec3(-30.0f, 0.0f, -4.0f));
-        ModelMatrix = glm::scale(ModelMatrix, glm::vec3(24.0f));
-        BasicShader.SetModel(ModelMatrix);
-        State.m_Renderer->RenderCurrent();
+        Renderer.RenderPyramid(BasicShader, glm::vec3(18.0f, 0.0f, -25.0f), glm::vec3(26.0f));
+        Renderer.RenderPyramid(BasicShader, glm::vec3(26.0f, 0.0f, 24.0f), glm::vec3(32.0f));
+        Renderer.RenderPyramid(BasicShader, glm::vec3(-30.0f, 0.0f, -4.0f), glm::vec3(24.0f));
         
         ModelMatrix = glm::mat4(1.0f);
         ModelMatrix = glm::scale(ModelMatrix, glm::vec3(150.0f, 1.0f, 150.0f));
         BasicShader.SetModel(ModelMatrix);
-        BasicShader.SetMaterial("material", sandMaterial);
-        State.m_Renderer->RenderNext();
+        BasicShader.SetMaterial("material", SandMaterial);
+        GroundModel.Render();
+
+        ModelMatrix = glm::mat4(1.0f);
+        ModelMatrix = glm::translate(ModelMatrix, glm::vec3(Carpet_X, 2.0f + 0.4*sin(CurrentFrame * 0.05), Carpet_Z));
+        BasicShader.SetModel(ModelMatrix);
+        BasicShader.SetInt("useTexture", 1);
+        Carpet.Render(BasicShader);
 
         glUseProgram(LightShader.GetId());
         LightShader.SetView(FreeView);
         
-        ModelMatrix = glm::mat4(1.0f);
-        ModelMatrix = glm::translate(ModelMatrix, pointLight_0.position);
-        ModelMatrix = glm::scale(ModelMatrix, glm::vec3(0.7f));
-        LightShader.SetVec3("lightColor", pointLight_0.diffuse);
-        LightShader.SetModel(ModelMatrix);
-        State.m_Renderer->RenderNext();
-
-        ModelMatrix = glm::mat4(1.0f);
-        ModelMatrix = glm::translate(ModelMatrix, pointLight_1.position);
-        ModelMatrix = glm::scale(ModelMatrix, glm::vec3(0.7f));
-        LightShader.SetVec3("lightColor", pointLight_1.diffuse);
-        LightShader.SetModel(ModelMatrix);
-        State.m_Renderer->RenderCurrent();
-
-        ModelMatrix = glm::mat4(1.0f);
-        ModelMatrix = glm::translate(ModelMatrix, pointLight_2.position);
-        ModelMatrix = glm::scale(ModelMatrix, glm::vec3(0.7f));
-        LightShader.SetVec3("lightColor", pointLight_2.diffuse);
-        LightShader.SetModel(ModelMatrix);
-        State.m_Renderer->RenderCurrent();
+        for (int i = 0; i < PointLights.size(); i++)
+            Renderer.RenderPointLight(LightModel, PointLights[i], LightShader);
 
         ModelMatrix = glm::mat4(1.0f);
         ModelMatrix = glm::translate(ModelMatrix, -50.0f * moonLight.direction);
@@ -235,8 +241,9 @@ int main() {
         ModelMatrix = glm::scale(ModelMatrix, glm::vec3(3.0f));
         LightShader.SetVec3("lightColor", glm::vec3(0.65f, 0.65f, 0.8f));
         LightShader.SetModel(ModelMatrix);
-        State.m_Renderer->RenderCurrent();
+        LightModel.Render();
         
+
         glUseProgram(0);
         glfwSwapBuffers(Window);
         FrameEndTime = glfwGetTime();
@@ -247,6 +254,7 @@ int main() {
             FrameEndTime = glfwGetTime();
         }
         dt = FrameEndTime - FrameStartTime;
+        CurrentFrame++;
     }
 
     glfwTerminate();

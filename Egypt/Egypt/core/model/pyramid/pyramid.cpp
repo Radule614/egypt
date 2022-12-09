@@ -1,4 +1,4 @@
-#include "pyramid.h"
+#include "pyramid.hpp"
 #include "pyramid_buffer.hpp"
 
 Pyramid::Pyramid() {

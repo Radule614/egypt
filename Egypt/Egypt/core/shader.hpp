@@ -58,6 +58,7 @@ public:
     void SetVec3(const std::string&, const glm::vec3&) const;
     void SetVec3(const std::string&, float, float, float) const;
     void SetFloat(const std::string&, float) const;
+    void SetInt(const std::string&, int) const;
 
     void SetMaterial(const std::string&, Material) const;
     void SetPointLight(const std::string&, PointLight) const;

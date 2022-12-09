@@ -21,12 +21,6 @@
     <ClCompile Include="core\shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="core\model\mesh.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="core\model\model.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="core\model\buffer\buffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -51,6 +45,18 @@
     <ClCompile Include="core\model\cube\cubebuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="core\model\mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="core\model\model.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="core\model\std_image.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="core\renderer\renderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -61,12 +67,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\shader.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="core\model\model.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="core\model\mesh.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="core\model\buffer\ibufferable.hpp">
@@ -81,7 +81,7 @@
     <ClInclude Include="core\model\pyramid\pyramid_buffer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="core\model\pyramid\pyramid.h">
+    <ClInclude Include="core\model\pyramid\pyramid.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="core\camera\camera.hpp">
@@ -103,6 +103,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="core\model\cube\cubebuffer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="core\model\mesh.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="core\model\model.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="core\model\texture.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="core\model\stb_image.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
