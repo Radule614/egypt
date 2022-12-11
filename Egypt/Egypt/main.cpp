@@ -24,7 +24,7 @@ const float TargetFPS = 100.0f;
 const float TargetFrameTime = 1.0f / TargetFPS;
 std::map<unsigned int, bool> PressedKeys;
 
-int NormalMapsEnabled = 0;
+int NormalMapsEnabled = 1;
 
 struct EngineState {
     OrbitalCamera* m_Camera;
@@ -33,7 +33,7 @@ struct EngineState {
 };
 
 EngineState State;
-OrbitalCamera Camera(45.0f, glm::vec3(0.0f, 1.0f, 1.0f), 5.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+OrbitalCamera Camera(45.0f, glm::vec3(-10.0f, 10.0f, 27.0f), 5.0f, glm::vec3(0.0f, 1.0f, 0.0f));
 
 static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode) {
     bool IsDown = action == GLFW_PRESS || action == GLFW_REPEAT;
@@ -175,10 +175,10 @@ int main() {
     std::vector<PointLight> PointLights { 
         { glm::vec3(17.0f, 5.5f, 6.0f), glm::vec3(1.0f, 1.0f, 0.0f) },
         { glm::vec3(7.0f, 5.5f, -17.0f), glm::vec3(0.4f, 1.0f, 0.0f) },
-        { glm::vec3(-30.0f, 18.0f, -4.0f), glm::vec3(1.0f, 0.2f, 0.0f) },
-        { glm::vec3(-12.0f, 5.5f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f) },
-        { glm::vec3(-12.0f, 5.5f, 12.0f), glm::vec3(0.8f, 0.4f, 1.0f) },
-        { glm::vec3(-12.0f, 5.5f, -12.0f), glm::vec3(0.2f, 0.7f, 1.0f) }
+        { glm::vec3(-40.0f, 20.0f, 12.0f), glm::vec3(1.0f, 0.2f, 0.0f) },
+        { glm::vec3(-25.0f, 5.5f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f) },
+        { glm::vec3(-25.0f, 5.5f, 20.0f), glm::vec3(0.8f, 0.4f, 1.0f) },
+        { glm::vec3(-35.0f, 5.5f, -25.0f), glm::vec3(0.2f, 0.7f, 1.0f) }
     };
 
     glUseProgram(BasicShader.GetId());
@@ -197,7 +197,7 @@ int main() {
     float Carpet_X = 0.0f;
     float Carpet_Y = 2.0f;
     float Carpet_Z = 0.0f;
-    int CurrentFrame = 0;
+    float AnimationFrame = 0;
 
     glViewport(0, 0, Renderer.m_FramebufferSize.x, Renderer.m_FramebufferSize.y);
     glEnable(GL_DEPTH_TEST);
@@ -240,9 +240,11 @@ int main() {
         BasicShader.SetInt("texture_normal1", 2);
         BasicShader.SetInt("useTexture", 1);
         BasicShader.SetInt("useNormalMap", NormalMapsEnabled);
-        Renderer.RenderPyramid(BasicShader, glm::vec3(18.0f, 0.0f, -25.0f), glm::vec3(26.0f), -25.0f);
-        Renderer.RenderPyramid(BasicShader, glm::vec3(26.0f, 0.0f, 24.0f), glm::vec3(32.0f), 45.0f);
-        Renderer.RenderPyramid(BasicShader, glm::vec3(-30.0f, 0.0f, -4.0f), glm::vec3(24.0f));
+        Renderer.RenderPyramid(BasicShader, glm::vec3(25.0f, 0.0f, -32.0f), glm::vec3(36.0f), -25.0f);
+        Renderer.RenderPyramid(BasicShader, glm::vec3(26.0f, 0.0f, 24.0f), glm::vec3(35.0f), 45.0f);
+        Renderer.RenderPyramid(BasicShader, glm::vec3(-40.0f, 0.0f, 12.0f), glm::vec3(29.0f));
+        Renderer.RenderPyramid(BasicShader, glm::vec3(-45.0f, 0.0f, -44.0f), glm::vec3(35.0f), 117.0f);
+        Renderer.RenderPyramid(BasicShader, glm::vec3(-40.0f, 0.0f, 52.0f), glm::vec3(17.0f), 231.0f);
         glActiveTexture(GL_TEXTURE0);
         BasicShader.SetInt("useNormalMap", 0);
 
@@ -264,12 +266,16 @@ int main() {
         GroundModel.Render();
         glActiveTexture(GL_TEXTURE0);
         BasicShader.SetInt("useNormalMap", 0);
-
+        
         ModelMatrix = glm::mat4(1.0f);
-        ModelMatrix = glm::translate(ModelMatrix, glm::vec3(Carpet_X, 2.0f + 0.4 * sin(CurrentFrame * 0.05), Carpet_Z));
+        ModelMatrix = glm::translate(ModelMatrix, glm::vec3(Carpet_X, 2.0f + 0.6 * sin(AnimationFrame), Carpet_Z));
+        //ModelMatrix = glm::translate(ModelMatrix, glm::vec3(Carpet_X, 2.0f, Carpet_Z));
         BasicShader.SetModel(ModelMatrix);
         BasicShader.SetInt("useTexture", 1);
+        BasicShader.SetInt("useNormalMap", NormalMapsEnabled);
         Carpet.Render(BasicShader);
+        BasicShader.SetInt("useNormalMap", 0);
+        
 
         glUseProgram(LightShader.GetId());
         LightShader.SetView(FreeView);
@@ -296,7 +302,7 @@ int main() {
             FrameEndTime = glfwGetTime();
         }
         dt = FrameEndTime - FrameStartTime;
-        CurrentFrame++;
+        AnimationFrame += 4 * dt;
     }
 
     glfwTerminate();

@@ -6,6 +6,7 @@ in vertex_out {
 	vec3 FragNormal;
     vec3 FragPos;
     vec2 FragTexCoords;
+    mat3 TBN;
 } FragmentIn;
 
 out vec4 FragColour;
@@ -100,7 +101,8 @@ void main() {
     vec3 normal = FragmentIn.FragNormal;
     if(useNormalMap){
         normal = vec3(texture(texture_normal1, FragmentIn.FragTexCoords));
-        //normal = normalize(normal * 2.0 - 1.0);  
+        normal = normal * 2.0 - 1.0;  
+        normal = normalize(FragmentIn.TBN * normal); 
     }
 
     vec3 color = calculateDirectionalLight(directionalLight, mat, normal, viewDir);

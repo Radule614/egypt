@@ -143,6 +143,7 @@
   <ItemGroup>
     <ClCompile Include="core\camera\camera.cpp" />
     <ClCompile Include="core\model\buffer\buffer.cpp" />
+    <ClCompile Include="core\model\buffer\ibufferable.cpp" />
     <ClCompile Include="core\model\cube\cube.cpp" />
     <ClCompile Include="core\model\cube\cubebuffer.cpp" />
     <ClCompile Include="core\model\mesh.cpp" />
@@ -178,6 +179,7 @@
     <ClInclude Include="core\model\quad\quad_buffer.hpp" />
     <ClInclude Include="core\model\stb_image.hpp" />
     <ClInclude Include="core\model\texture.hpp" />
+    <ClInclude Include="core\model\vertex.hpp" />
     <ClInclude Include="core\renderer\irenderable.hpp" />
     <ClInclude Include="core\renderer\material.hpp" />
     <ClInclude Include="core\renderer\renderer.hpp" />

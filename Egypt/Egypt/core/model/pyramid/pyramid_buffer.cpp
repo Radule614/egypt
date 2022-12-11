@@ -1,44 +1,40 @@
 #include "pyramid_buffer.hpp"
 
-std::vector<float> PyramidBuffer::m_Vertices = {
-    //      POS        |     NORMALS    |  TexCoords
-    // X    Y      Z      X     Y     Z    X    Y
+std::vector<Vertex> PyramidBuffer::m_Vertices = {
+    Vertex{glm::vec3(-0.5f, 0.0f, 0.5f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
+    Vertex{glm::vec3(0.5f, 0.0f, -0.5f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(6.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
+    Vertex{glm::vec3(0.5f, 0.0f, 0.5f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(6.0f, 6.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
+    Vertex{glm::vec3(0.5f, 0.0f, -0.5f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(6.0f, 6.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
+    Vertex{glm::vec3(-0.5f, 0.0f, 0.5f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(0.0f, 6.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
+    Vertex{glm::vec3(-0.5f, 0.0f, -0.5f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
 
-    -0.5f, 0.0f, 0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f,
-    0.5f, 0.0f, -0.5f, 0.0f, -1.0f, 0.0f, 6.0f, 0.0f,
-    0.5f, 0.0f, 0.5f,  0.0f, -1.0f, 0.0f, 6.0f, 6.0f,
-    0.5f, 0.0f, -0.5f, 0.0f, -1.0f, 0.0f, 6.0f, 6.0f,
-    -0.5f, 0.0f, 0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 6.0f,
-    -0.5f, 0.0f, -0.5f,0.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+    Vertex{glm::vec3(-0.5f, 0.0f, 0.5f), glm::vec3(-0.6f, 0.5f, 0.0f), glm::vec2(6.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
+    Vertex{glm::vec3(0.0f, 0.6f, 0.0f), glm::vec3(-0.6f, 0.5f, 0.0f), glm::vec2(3.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
+    Vertex{glm::vec3(-0.5f, 0.0f, -0.5f), glm::vec3(-0.6f, 0.5f, 0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
 
-    -0.5f, 0.0f, 0.5f, -0.6f, 0.5f, 0.0f, 6.0f, 0.0f,
-    0.0f, 0.6f, 0.0f, -0.6f, 0.5f, 0.0f,  3.0f, 3.0f,
-    -0.5f, 0.0f, -0.5f, -0.6f, 0.5f, 0.0f,0.0f, 0.0f,
+    Vertex{glm::vec3(-0.5f, 0.0f, -0.5f), glm::vec3(0.0f, 0.5f, -0.6f), glm::vec2(6.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
+    Vertex{glm::vec3(0.0f, 0.6f, 0.0f), glm::vec3(0.0f, 0.5f, -0.6f), glm::vec2(3.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
+    Vertex{glm::vec3(0.5f, 0.0f, -0.5f), glm::vec3(0.0f, 0.5f, -0.6f), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
 
-    -0.5f, 0.0f, -0.5f, 0.0f, 0.5f, -0.6f,6.0f, 0.0f,
-    0.0f, 0.6f, 0.0f, 0.0f, 0.5f, -0.6f,  3.0f, 3.0f,
-    0.5f, 0.0f, -0.5f, 0.0f, 0.5f, -0.6f, 0.0f, 0.0f,
+    Vertex{glm::vec3(0.5f, 0.0f, -0.5f), glm::vec3(0.6f, 0.5f, 0.0f), glm::vec2(6.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
+    Vertex{glm::vec3(0.0f, 0.6f, 0.0f), glm::vec3(0.6f, 0.5f, 0.0f), glm::vec2(3.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
+    Vertex{glm::vec3(0.5f, 0.0f, 0.5f), glm::vec3(0.6f, 0.5f, 0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
 
-    0.5f, 0.0f, -0.5f, 0.6f, 0.5f, 0.0f,  6.0f, 0.0f,
-    0.0f, 0.6f, 0.0f, 0.6f, 0.5f, 0.f,    3.0f, 3.0f,
-    0.5f, 0.0f, 0.5f, 0.6f, 0.5f, 0.0f,   0.0f, 0.0f,
-
-    0.5f, 0.0f, 0.5f, 0.0f, 0.5f, 0.6f,   6.0f, 0.0f,
-    0.0f, 0.6f, 0.0f, 0.0f, 0.5f, 0.6f,   3.0f, 3.0f,
-    -0.5f, 0.0f, 0.5f, 0.0f, 0.5f, 0.6f,  0.0f, 0.0f,
+    Vertex{glm::vec3(0.5f, 0.0f, 0.5f), glm::vec3(0.0f, 0.5f, 0.6f), glm::vec2(6.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
+    Vertex{glm::vec3(0.0f, 0.6f, 0.0f), glm::vec3(0.0f, 0.5f, 0.6f), glm::vec2(3.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
+    Vertex{glm::vec3(-0.5f, 0.0f, 0.5f), glm::vec3(0.0f, 0.5f, 0.6f), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
 };
 
-float* PyramidBuffer::GetVertices()
+PyramidBuffer::PyramidBuffer() {
+    CalculateTangent(m_Vertices);
+}
+
+std::vector<Vertex> PyramidBuffer::GetVertices()
 {
-    return m_Vertices.data();
+    return m_Vertices;
 }
 
 unsigned PyramidBuffer::GetVertexCount()
 {
     return m_Vertices.size();
-}
-
-unsigned PyramidBuffer::GetVertexElementCount()
-{
-    return 8;
 }

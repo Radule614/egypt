@@ -13,10 +13,12 @@
 #include <GL/glew.h>
 #include <iostream>
 #include "ibufferable.hpp"
+#include <glm/glm.hpp>
 
 #define POSITION_LOCATION 0
 #define NORMAL_LOCATION 1
 #define TEXCOORD_LOCATION 2
+#define TANGENT_LOCATION 3
 
 class Buffer {
 private:

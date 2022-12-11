@@ -58,11 +58,6 @@ OrbitalCamera::Zoom(float dy, float dt)  {
 
 void
 OrbitalCamera::updateVectors() {
-    /*
-    m_Position = glm::vec3(m_Target.x + cos(m_Yaw) * cos(m_Pitch),
-        m_Target.y + sin(m_Pitch),
-        m_Target.z + cos(m_Pitch) * sin(m_Yaw));
-    */
     m_Right = glm::normalize(glm::cross(m_Front, m_WorldUp));
     m_Up = glm::normalize(glm::cross(m_Right, m_Front));
 }
@@ -83,7 +78,6 @@ void OrbitalCamera::CalculateDirection(float& xoffset, float& yoffset)
     direction.y = sin(glm::radians(m_Pitch));
     direction.z = sin(glm::radians(m_Yaw)) * cos(glm::radians(m_Pitch));
     m_Front = glm::normalize(direction);
-    //std::cout << m_Front.x << ", " << m_Front.y << ", " << m_Front.z << std::endl;
     updateVectors();
 }
 

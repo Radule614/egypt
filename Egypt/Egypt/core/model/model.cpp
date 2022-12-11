@@ -4,6 +4,7 @@ using namespace std;
 
 std::vector<Texture> textures_loaded;
 
+
 void Model::Render(Shader& shader)
 {
     for (unsigned int i = 0; i < meshes.size(); i++)
@@ -13,7 +14,7 @@ void Model::Render(Shader& shader)
 void Model::loadModel(std::string path)
 {
     Assimp::Importer import;
-    const aiScene* scene = import.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
+    const aiScene* scene = import.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
 
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
     {
@@ -56,6 +57,10 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
         vector.y = mesh->mNormals[i].y;
         vector.z = mesh->mNormals[i].z;
         vertex.Normal = vector;
+        vector.x = mesh->mTangents[i].x;
+        vector.y = mesh->mTangents[i].y;
+        vector.z = mesh->mTangents[i].z;
+        vertex.Tangent = vector;
         if (mesh->mTextureCoords[0])
         {
             glm::vec2 vec;
@@ -76,12 +81,12 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
     if (mesh->mMaterialIndex >= 0)
     {
         aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-        vector<Texture> diffuseMaps = loadMaterialTextures(material,
-            aiTextureType_DIFFUSE, "texture_diffuse");
+        vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
         textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-        vector<Texture> specularMaps = loadMaterialTextures(material,
-            aiTextureType_SPECULAR, "texture_specular");
+        vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
         textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
+        vector<Texture> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal");
+        textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
     }
 
     return Mesh(vertices, indices, textures);

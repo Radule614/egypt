@@ -3,12 +3,15 @@
 #include "../buffer/ibufferable.hpp"
 #include <vector>
 
+#include "../texture.hpp"
+
 class QuadBuffer : public IBufferable {
 public:
-    virtual float* GetVertices();
+    QuadBuffer();
+
+    virtual std::vector<Vertex> GetVertices();
     virtual unsigned GetVertexCount();
-    virtual unsigned GetVertexElementCount();
 
 private:
-    static std::vector<float> m_Vertices;
+    static std::vector<Vertex> m_Vertices;
 };

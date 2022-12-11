@@ -7,6 +7,7 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h> 
+#include "vertex.hpp"
 #include "texture.hpp"
 
 class Model {

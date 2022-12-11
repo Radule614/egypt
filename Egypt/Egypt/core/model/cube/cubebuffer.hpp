@@ -1,14 +1,3 @@
-/**
- * @file cubebuffer.hpp
- * @author Jovan Ivosevic
- * @brief Cube buffer implementation
- * @version 0.1
- * @date 2022-10-09
- *
- * @copyright Copyright (c) 2022
- *
- */
-
 #pragma once
 
 #include <vector>
@@ -16,15 +5,10 @@
 
 class CubeBuffer : public IBufferable {
 public:
-    /**
-     * @brief Empty ctor
-     *
-     */
     CubeBuffer();
 private:
-    static std::vector<float> mVertices;
+    static std::vector<Vertex> m_Vertices;
 
-    virtual float* GetVertices();
+    virtual std::vector<Vertex> GetVertices();
     virtual unsigned GetVertexCount();
-    virtual unsigned GetVertexElementCount();
 };

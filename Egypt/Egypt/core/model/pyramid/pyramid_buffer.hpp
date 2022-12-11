@@ -5,10 +5,11 @@
 
 class PyramidBuffer : public IBufferable {
 public:
-    virtual float* GetVertices();
+    PyramidBuffer();
+
+    virtual std::vector<Vertex> GetVertices();
     virtual unsigned GetVertexCount();
-    virtual unsigned GetVertexElementCount();
 
 private:
-    static std::vector<float> m_Vertices;
+    static std::vector<Vertex> m_Vertices;
 };
