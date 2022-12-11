@@ -1,14 +1,14 @@
 #include "renderer.hpp"
 
-void Renderer::RenderPointLight(IRenderable& model, PointLight& light, Shader& shader) {
+void Renderer::RenderPointLight(Model& model, PointLight& light, Shader& shader) {
     glUseProgram(shader.GetId());
 
     glm::mat4 ModelMatrix = glm::mat4(1.0f);
     ModelMatrix = glm::translate(ModelMatrix, light.position);
-    ModelMatrix = glm::scale(ModelMatrix, glm::vec3(0.7f));
+    ModelMatrix = glm::scale(ModelMatrix, glm::vec3(0.5f));
     shader.SetVec3("lightColor", light.diffuse);
     shader.SetModel(ModelMatrix);
-    model.Render();
+    model.Render(shader);
 }
 
 

@@ -15,7 +15,7 @@ OrbitalCamera::OrbitalCamera(float fov, glm::vec3 position, float distance, cons
     m_Yaw = -90.0f;
     m_Pitch = 0.0f;
     m_Position = position;
-    m_Velocity = 30.0f;
+    m_Velocity = 45.0f;
 
     m_Front = glm::normalize(m_Target - m_Position);
     updateVectors();

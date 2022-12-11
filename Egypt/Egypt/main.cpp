@@ -145,6 +145,7 @@ int main() {
     Pyramid PyramidModel;
     Cube LightModel;
     Model Carpet("assets/carpet/carpet.obj");
+    Model Sphere("assets/sphere/sphere.obj");
 
     Material PyrMaterial = { glm::vec3(0.04f, 0.04f, 0.1f), glm::vec3(0.6f, 0.6f, 0.3f), glm::vec3(0.3f, 0.3f, 0.2f), 128.0f };
     Material SandMaterial = { glm::vec3(0.04f, 0.04f, 0.0f), glm::vec3(0.4f, 0.4f, 0.2f), glm::vec3(0.3f, 0.3f, 0.2f), 128.0f };
@@ -166,19 +167,19 @@ int main() {
     State.m_Renderer = &Renderer;
     State.m_Camera = &Camera;
     
-    float RenderDistance = 200.0f;
+    float RenderDistance = 300.0f;
     glm::mat4 ModelMatrix(1.0f);
     glm::mat4 FreeView = glm::lookAt(Camera.m_Position, Camera.m_Position + Camera.m_Front, Camera.m_Up);
     glm::mat4 Perspective = glm::perspective(45.0f, Renderer.m_FramebufferSize.x / (float)Renderer.m_FramebufferSize.y, 0.1f, RenderDistance);
 
-    DirectionalLight MoonLight = { glm::normalize(glm::vec3(-1.0f, -0.3f, 0.5f)), glm::vec3(0.01f, 0.01f, 0.02f), glm::vec3(0.03f, 0.03f, 0.05f), glm::vec3(0.04f, 0.04f, 0.2f) };
+    DirectionalLight MoonLight = { glm::normalize(glm::vec3(-1.0f, -0.3f, 0.5f)), glm::vec3(0.001f, 0.001f, 0.002f), glm::vec3(0.03f, 0.03f, 0.05f), glm::vec3(0.04f, 0.04f, 0.2f) };
     std::vector<PointLight> PointLights { 
-        { glm::vec3(17.0f, 5.5f, 6.0f), glm::vec3(1.0f, 1.0f, 0.0f) },
-        { glm::vec3(7.0f, 5.5f, -17.0f), glm::vec3(0.4f, 1.0f, 0.0f) },
+        { glm::vec3(25.0f, 5.5f, -8.0f), glm::vec3(1.0f, 1.0f, 0.0f) },
+        { glm::vec3(-50.0f, 6.5f, -12.0f), glm::vec3(0.4f, 1.0f, 0.0f) },
         { glm::vec3(-40.0f, 20.0f, 12.0f), glm::vec3(1.0f, 0.2f, 0.0f) },
         { glm::vec3(-25.0f, 5.5f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f) },
         { glm::vec3(-25.0f, 5.5f, 20.0f), glm::vec3(0.8f, 0.4f, 1.0f) },
-        { glm::vec3(-35.0f, 5.5f, -25.0f), glm::vec3(0.2f, 0.7f, 1.0f) }
+        { glm::vec3(-31.0f, 5.5f, -32.0f), glm::vec3(0.2f, 0.7f, 1.0f) }
     };
 
     glUseProgram(BasicShader.GetId());
@@ -191,8 +192,6 @@ int main() {
     LightShader.SetProjection(Perspective);
     
     glUseProgram(0);
-
-    
 
     float Carpet_X = 0.0f;
     float Carpet_Y = 2.0f;
@@ -209,7 +208,7 @@ int main() {
     float dt = FrameEndTime - FrameStartTime;
     while (!glfwWindowShouldClose(Window)) {
         glfwPollEvents();
-        glClearColor(0, 0.07, 0.15, 1.0);
+        glClearColor(0, 0.04, 0.07, 1.0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         FrameStartTime = glfwGetTime();
         if (PressedKeys[GLFW_KEY_W] || PressedKeys[GLFW_KEY_S] || PressedKeys[GLFW_KEY_D] || PressedKeys[GLFW_KEY_A])
@@ -240,7 +239,7 @@ int main() {
         BasicShader.SetInt("texture_normal1", 2);
         BasicShader.SetInt("useTexture", 1);
         BasicShader.SetInt("useNormalMap", NormalMapsEnabled);
-        Renderer.RenderPyramid(BasicShader, glm::vec3(25.0f, 0.0f, -32.0f), glm::vec3(36.0f), -25.0f);
+        Renderer.RenderPyramid(BasicShader, glm::vec3(30.0f, 0.0f, -32.0f), glm::vec3(36.0f), -25.0f);
         Renderer.RenderPyramid(BasicShader, glm::vec3(26.0f, 0.0f, 24.0f), glm::vec3(35.0f), 45.0f);
         Renderer.RenderPyramid(BasicShader, glm::vec3(-40.0f, 0.0f, 12.0f), glm::vec3(29.0f));
         Renderer.RenderPyramid(BasicShader, glm::vec3(-45.0f, 0.0f, -44.0f), glm::vec3(35.0f), 117.0f);
@@ -269,7 +268,6 @@ int main() {
         
         ModelMatrix = glm::mat4(1.0f);
         ModelMatrix = glm::translate(ModelMatrix, glm::vec3(Carpet_X, 2.0f + 0.6 * sin(AnimationFrame), Carpet_Z));
-        //ModelMatrix = glm::translate(ModelMatrix, glm::vec3(Carpet_X, 2.0f, Carpet_Z));
         BasicShader.SetModel(ModelMatrix);
         BasicShader.SetInt("useTexture", 1);
         BasicShader.SetInt("useNormalMap", NormalMapsEnabled);
@@ -281,15 +279,15 @@ int main() {
         LightShader.SetView(FreeView);
         
         for (int i = 0; i < PointLights.size(); i++)
-            Renderer.RenderPointLight(LightModel, PointLights[i], LightShader);
-
+            Renderer.RenderPointLight(Sphere, PointLights[i], LightShader);
+        
         ModelMatrix = glm::mat4(1.0f);
         ModelMatrix = glm::translate(ModelMatrix, -50.0f * MoonLight.direction);
         ModelMatrix = glm::translate(ModelMatrix, Camera.m_Position);
-        ModelMatrix = glm::scale(ModelMatrix, glm::vec3(3.0f));
-        LightShader.SetVec3("lightColor", glm::vec3(0.65f, 0.65f, 0.8f));
+        ModelMatrix = glm::scale(ModelMatrix, glm::vec3(1.3f));
+        LightShader.SetVec3("lightColor", glm::vec3(0.35f, 0.45f, 0.64f));
         LightShader.SetModel(ModelMatrix);
-        LightModel.Render();
+        Sphere.Render(LightShader);
         
 
         glUseProgram(0);

@@ -3,6 +3,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "../shader.hpp"
 #include "../model/pyramid/pyramid.hpp"
+#include "../model/model.hpp"
 
 class Renderer {
 public:
@@ -13,6 +14,6 @@ public:
 
     Material m_SandMaterial;
     
-    void RenderPointLight(IRenderable& model, PointLight& light, Shader& shader);
+    void RenderPointLight(Model& model, PointLight& light, Shader& shader);
     void RenderPyramid(Shader& shader, glm::vec3 position, glm::vec3 scale, float angle = 0.0f);
 };
