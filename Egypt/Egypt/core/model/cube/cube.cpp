@@ -1,12 +1,12 @@
 #include "cube.hpp"
 #include "cubebuffer.hpp"
 
-Cube::Cube() {
+Core::Cube::Cube() {
     CubeBuffer CubeBuffer;
-    mBuffer = new Buffer(CubeBuffer);
+    m_Buffer = new Buffer(CubeBuffer);
 }
 
 void
-Cube::Render() {
-    mBuffer->Render();
+Core::Cube::Render(Shader& shader) {
+    m_Buffer->Render(shader);
 }

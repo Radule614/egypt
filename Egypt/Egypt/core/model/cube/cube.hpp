@@ -1,15 +1,14 @@
 #pragma once
-#include "../buffer/buffer.hpp"
-#include <vector>
 
 #include "cubebuffer.hpp"
-#include "../../renderer/irenderable.hpp"
+#include "../../shader.hpp"
+#include "../imodel.hpp"
 
-class Cube : public IRenderable {
-public:
-    Cube();
-    void Render();
-private:
-    Buffer* mBuffer;
+namespace Core {
+    class Cube : public IModel {
+    public:
+        Cube();
 
-};
+        void Render(Shader& shader);
+    };
+}

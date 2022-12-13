@@ -3,7 +3,7 @@
 #include <GLFW/glfw3.h>
 
 
-OrbitalCamera::OrbitalCamera(float fov, glm::vec3 position, float distance, const glm::vec3& target, float rotateSpeed, float zoomSpeed, const glm::vec3 &worldUp)
+Core::OrbitalCamera::OrbitalCamera(float fov, glm::vec3 position, float distance, const glm::vec3& target, float rotateSpeed, float zoomSpeed, const glm::vec3 &worldUp)
     : m_WorldUp(worldUp),
       m_Target(target)  {
     m_FOV = fov;
@@ -12,8 +12,8 @@ OrbitalCamera::OrbitalCamera(float fov, glm::vec3 position, float distance, cons
     m_ZoomSpeed = zoomSpeed;
     m_WorldUp = worldUp;
     m_Target = target;
-    m_Yaw = -90.0f;
-    m_Pitch = 0.0f;
+    m_Yaw = -68.0f;
+    m_Pitch = -15.0f;
     m_Position = position;
     m_Velocity = 45.0f;
 
@@ -21,8 +21,7 @@ OrbitalCamera::OrbitalCamera(float fov, glm::vec3 position, float distance, cons
     updateVectors();
 }
 
-void
-OrbitalCamera::Rotate(float dYaw, float dPitch, float dt) {
+void Core::OrbitalCamera::Rotate(float dYaw, float dPitch, float dt) {
     dYaw *= m_RotateSpeed * dt;
     dPitch *= m_RotateSpeed * dt;
 
@@ -45,8 +44,7 @@ OrbitalCamera::Rotate(float dYaw, float dPitch, float dt) {
     updateVectors();
 }
 
-void
-OrbitalCamera::Zoom(float dy, float dt)  {
+void Core::OrbitalCamera::Zoom(float dy, float dt)  {
     dy *= m_ZoomSpeed * dt;
     m_Radius -= dy;
     if (m_Radius <= 0.5f) {
@@ -56,13 +54,12 @@ OrbitalCamera::Zoom(float dy, float dt)  {
     updateVectors();
 }
 
-void
-OrbitalCamera::updateVectors() {
+void Core::OrbitalCamera::updateVectors() {
     m_Right = glm::normalize(glm::cross(m_Front, m_WorldUp));
     m_Up = glm::normalize(glm::cross(m_Right, m_Front));
 }
 
-void OrbitalCamera::CalculateDirection(float& xoffset, float& yoffset)
+void Core::OrbitalCamera::CalculateDirection(float& xoffset, float& yoffset)
 {
     float sensitivity = 0.05f;
     xoffset *= sensitivity;
@@ -81,7 +78,7 @@ void OrbitalCamera::CalculateDirection(float& xoffset, float& yoffset)
     updateVectors();
 }
 
-void OrbitalCamera::CalculateMoveDirection(std::map<unsigned int, bool>& pressedKeys, float delta)
+void Core::OrbitalCamera::CalculateMoveDirection(std::map<unsigned int, bool>& pressedKeys, float delta)
 {
     glm::vec3 dirVector_front = glm::vec3(0);
     glm::vec3 dirVector_side = glm::vec3(0);

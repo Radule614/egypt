@@ -3,12 +3,14 @@
 #include <vector>
 #include "../buffer/ibufferable.hpp"
 
-class CubeBuffer : public IBufferable {
-public:
-    CubeBuffer();
-private:
-    static std::vector<Vertex> m_Vertices;
+namespace Core {
+    class CubeBuffer : public IBufferable {
+    public:
+        CubeBuffer();
+    private:
+        static std::vector<Core::Vertex> m_Vertices;
 
-    virtual std::vector<Vertex> GetVertices();
-    virtual unsigned GetVertexCount();
-};
+        virtual std::vector<Core::Vertex> GetVertices();
+        virtual unsigned GetVertexCount();
+    };
+}

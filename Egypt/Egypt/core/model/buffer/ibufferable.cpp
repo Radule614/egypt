@@ -1,6 +1,6 @@
 #include "ibufferable.hpp"
 
-glm::vec3 CalculateTangent(glm::vec3 pos1, glm::vec3 pos2, glm::vec3 pos3, glm::vec2 uv1, glm::vec2 uv2, glm::vec2 uv3) {
+glm::vec3 Core::CalculateTangent(glm::vec3 pos1, glm::vec3 pos2, glm::vec3 pos3, glm::vec2 uv1, glm::vec2 uv2, glm::vec2 uv3) {
 	glm::vec3 edge1 = pos2 - pos1;
 	glm::vec3 edge2 = pos3 - pos1;
 	glm::vec2 deltaUV1 = uv2 - uv1;
@@ -14,7 +14,7 @@ glm::vec3 CalculateTangent(glm::vec3 pos1, glm::vec3 pos2, glm::vec3 pos3, glm::
 	return tangent;
 }
 
-void CalculateTangent(std::vector<Vertex>& vertices) {
+void Core::CalculateTangent(std::vector<Vertex>& vertices) {
 	if (vertices.size() % 3 != 0) return;
 	for (int i = 0; i < vertices.size(); i += 3) {
 		glm::vec3& pos1 = vertices[i].Position;

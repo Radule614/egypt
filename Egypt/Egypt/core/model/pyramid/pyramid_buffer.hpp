@@ -3,13 +3,17 @@
 #include "../buffer/ibufferable.hpp"
 #include <vector>
 
-class PyramidBuffer : public IBufferable {
-public:
-    PyramidBuffer();
+namespace Core {
 
-    virtual std::vector<Vertex> GetVertices();
-    virtual unsigned GetVertexCount();
+    class PyramidBuffer : public IBufferable {
+    public:
+        PyramidBuffer();
 
-private:
-    static std::vector<Vertex> m_Vertices;
-};
+        virtual std::vector<Core::Vertex> GetVertices();
+        virtual unsigned GetVertexCount();
+
+    private:
+        static std::vector<Core::Vertex> m_Vertices;
+    };
+
+}

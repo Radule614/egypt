@@ -45,13 +45,13 @@
     <ClCompile Include="core\model\cube\cubebuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="core\model\mesh.cpp">
+    <ClCompile Include="core\model\assimp_model\mesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="core\model\model.cpp">
+    <ClCompile Include="core\model\assimp_model\assimp_model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="core\model\std_image.cpp">
+    <ClCompile Include="utility\std_image.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="core\renderer\renderer.cpp">
@@ -63,11 +63,14 @@
     <ClCompile Include="core\model\buffer\ibufferable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="core\model\imodel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="shaders\basic.vert" />
-    <None Include="shaders\basic.frag" />
+    <None Include="shaders\material.vert" />
+    <None Include="shaders\material.frag" />
     <None Include="shaders\light.frag" />
     <None Include="shaders\light.vert" />
   </ItemGroup>
@@ -76,9 +79,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="core\model\buffer\ibufferable.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="core\renderer\irenderable.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="core\model\buffer\buffer.hpp">
@@ -102,7 +102,7 @@
     <ClInclude Include="core\model\quad\quad_buffer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="core\renderer\material.hpp">
+    <ClInclude Include="core\model\material.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="core\model\cube\cube.hpp">
@@ -111,19 +111,31 @@
     <ClInclude Include="core\model\cube\cubebuffer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="core\model\mesh.hpp">
+    <ClInclude Include="core\model\assimp_model\mesh.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="core\model\model.hpp">
+    <ClInclude Include="core\model\assimp_model\assimp_model.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="core\model\texture.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="core\model\stb_image.hpp">
+    <ClInclude Include="utility\stb_image.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="core\model\vertex.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="core\model\imodel.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="settings.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="window.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="state.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

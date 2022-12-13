@@ -1,6 +1,6 @@
 #include "texture.hpp"
 
-unsigned int LoadTextureFromFile(const std::string& path, const std::string& directory) {
+unsigned int Core::LoadTextureFromFile(const std::string& fullpath) {
     unsigned int id;
     glGenTextures(1, &id);
     glBindTexture(GL_TEXTURE_2D, id);
@@ -13,8 +13,7 @@ unsigned int LoadTextureFromFile(const std::string& path, const std::string& dir
 
     int width, height, nrChannels;
     stbi_set_flip_vertically_on_load(true);
-    std::cout << directory + path << std::endl;
-    unsigned char* data = stbi_load((directory + "/" + path).c_str(), &width, &height, &nrChannels, 0);
+    unsigned char* data = stbi_load((fullpath).c_str(), &width, &height, &nrChannels, 0);
     if (data)
     {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -25,6 +24,9 @@ unsigned int LoadTextureFromFile(const std::string& path, const std::string& dir
         std::cout << "Failed to load texture" << std::endl;
     }
     stbi_image_free(data);
-
+    std::cout << fullpath << std::endl;
     return id;
+}
+unsigned int Core::LoadTextureFromFile(const std::string& path, const std::string& directory) {
+    return LoadTextureFromFile(directory + "/" + path);
 }

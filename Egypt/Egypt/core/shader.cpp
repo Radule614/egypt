@@ -1,15 +1,14 @@
 #include "shader.hpp"
 
-
 Shader::Shader(const std::string& vShaderPath, const std::string& fShaderPath) {
     unsigned vs = loadAndCompileShader(vShaderPath, GL_VERTEX_SHADER);
     unsigned fs = loadAndCompileShader(fShaderPath, GL_FRAGMENT_SHADER);
-    mId = createBasicProgram(vs, fs);
+    m_Id = createBasicProgram(vs, fs);
 }
 
 void
 Shader::SetUniform4m(const std::string& uniform, const glm::mat4& m) const {
-    glUniformMatrix4fv(glGetUniformLocation(mId, uniform.c_str()), 1, GL_FALSE, &m[0][0]);
+    glUniformMatrix4fv(glGetUniformLocation(m_Id, uniform.c_str()), 1, GL_FALSE, &m[0][0]);
 }
 
 void
@@ -27,7 +26,7 @@ void Shader::SetProjection(const glm::mat4& m) const {
 }
 
 void Shader::SetVec3(const std::string& uniform, const glm::vec3& v) const {
-    glUniform3fv(glGetUniformLocation(mId, uniform.c_str()), 1, &v[0]);
+    glUniform3fv(glGetUniformLocation(m_Id, uniform.c_str()), 1, &v[0]);
 }
 
 void Shader::SetVec3(const std::string& uniform, float x, float y, float z) const {
@@ -35,21 +34,21 @@ void Shader::SetVec3(const std::string& uniform, float x, float y, float z) cons
 }
 
 void Shader::SetFloat(const std::string& uniform, float x) const {
-    glUniform1f(glGetUniformLocation(mId, uniform.c_str()), x);
+    glUniform1f(glGetUniformLocation(m_Id, uniform.c_str()), x);
 }
 
 void Shader::SetInt(const std::string& uniform, int i) const
 {
-    glUniform1i(glGetUniformLocation(mId, uniform.c_str()), i);
+    glUniform1i(glGetUniformLocation(m_Id, uniform.c_str()), i);
 }
 
-void Shader::SetMaterial(const std::string& uniform, Material material) const {
+void Shader::SetMaterial(const std::string& uniform, Core::Material material) const {
     SetVec3(uniform + ".ambient", material.ambient);
     SetVec3(uniform + ".diffuse", material.diffuse);
     SetVec3(uniform + ".specular", material.specular);
     SetFloat(uniform + ".shininess", material.shininess);
 }
-void Shader::SetPointLight(const std::string& uniform, PointLight light) const {
+void Shader::SetPointLight(const std::string& uniform, Core::PointLight light) const {
     SetVec3(uniform + ".position", light.position);
     SetVec3(uniform + ".ambient", light.ambient);
     SetVec3(uniform + ".diffuse", light.diffuse);
@@ -59,7 +58,7 @@ void Shader::SetPointLight(const std::string& uniform, PointLight light) const {
     SetFloat(uniform + ".quadratic", light.quadratic);
 }
 
-void Shader::SetDirectionalLight(const std::string& uniform, DirectionalLight light) const {
+void Shader::SetDirectionalLight(const std::string& uniform, Core::DirectionalLight light) const {
     SetVec3(uniform + ".direction", light.direction);
     SetVec3(uniform + ".ambient", light.ambient);
     SetVec3(uniform + ".diffuse", light.diffuse);
@@ -68,7 +67,7 @@ void Shader::SetDirectionalLight(const std::string& uniform, DirectionalLight li
 
 unsigned
 Shader::GetId() const {
-    return mId;
+    return m_Id;
 }
 
 unsigned

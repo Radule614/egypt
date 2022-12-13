@@ -1,12 +1,14 @@
 #include "pyramid.hpp"
-#include "pyramid_buffer.hpp"
 
-Pyramid::Pyramid() {
+Core::Pyramid::Pyramid() {
 	PyramidBuffer buffer;
 	m_Buffer = new Buffer(buffer);
+	m_Buffer->AddDiffuseMap("assets/brick/brick.jpg");
+	m_Buffer->AddSpecularMap("assets/brick/specular.jpg");
+	m_Buffer->AddNormalMap("assets/brick/normal.jpg");
 }
 
-void Pyramid::Render()
+void Core::Pyramid::Render(Shader& shader)
 {
-	m_Buffer->Render();
+	m_Buffer->Render(shader);
 }

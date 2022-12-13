@@ -1,13 +1,16 @@
 #pragma once
 
-#include "../../renderer/irenderable.hpp"
-#include "../buffer/buffer.hpp"
+#include "../../shader.hpp"
+#include "../imodel.hpp"
+#include "quad_buffer.hpp"
 
-class Quad : public IRenderable {
-public:
-	Quad();
+namespace Core {
 
-	virtual void Render();
-private:
-	Buffer* m_Buffer;
-};
+	class Quad : public IModel {
+	public:
+		Quad();
+
+		virtual void Render(Shader& shader);
+	};
+
+}

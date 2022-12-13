@@ -1,6 +1,8 @@
 #include "quad_buffer.hpp"
 
-std::vector<Vertex> QuadBuffer::m_Vertices = {
+using namespace Core;
+
+std::vector<Vertex> Core::QuadBuffer::m_Vertices = {
     Vertex { glm::vec3(-0.5f, 0.0f, 0.5f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
     Vertex { glm::vec3(0.5f, 0.0f, 0.5f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
     Vertex { glm::vec3(0.5f, 0.0f, -0.5f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f)},
@@ -10,16 +12,16 @@ std::vector<Vertex> QuadBuffer::m_Vertices = {
     Vertex { glm::vec3(-0.5f, 0.0f, 0.5f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)}
 };
 
-QuadBuffer::QuadBuffer() {
+Core::QuadBuffer::QuadBuffer() {
     CalculateTangent(m_Vertices);
 }
 
-std::vector<Vertex> QuadBuffer::GetVertices()
+std::vector<Vertex> Core::QuadBuffer::GetVertices()
 {
     return m_Vertices;
 }
 
-unsigned QuadBuffer::GetVertexCount()
+unsigned Core::QuadBuffer::GetVertexCount()
 {
     return m_Vertices.size();
 }

@@ -1,13 +1,14 @@
 #pragma once
 
-#include "../../renderer/irenderable.hpp"
-#include "../buffer/buffer.hpp"
+#include "../../shader.hpp"
+#include "../imodel.hpp"
+#include "pyramid_buffer.hpp"
 
-class Pyramid : public IRenderable {
-public:
-	Pyramid();
+namespace Core {
+	class Pyramid : public IModel {
+	public:
+		Pyramid();
 
-	virtual void Render();
-private:
-	Buffer* m_Buffer;
-};
+		virtual void Render(Shader& shader);
+	};
+}

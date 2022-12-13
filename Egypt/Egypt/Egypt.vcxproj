@@ -78,6 +78,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)\build\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\build\intermediate\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -132,6 +134,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -146,13 +149,14 @@
     <ClCompile Include="core\model\buffer\ibufferable.cpp" />
     <ClCompile Include="core\model\cube\cube.cpp" />
     <ClCompile Include="core\model\cube\cubebuffer.cpp" />
-    <ClCompile Include="core\model\mesh.cpp" />
-    <ClCompile Include="core\model\model.cpp" />
+    <ClCompile Include="core\model\assimp_model\mesh.cpp" />
+    <ClCompile Include="core\model\assimp_model\assimp_model.cpp" />
+    <ClCompile Include="core\model\imodel.cpp" />
     <ClCompile Include="core\model\pyramid\pyramid.cpp" />
     <ClCompile Include="core\model\pyramid\pyramid_buffer.cpp" />
     <ClCompile Include="core\model\quad\quad.cpp" />
     <ClCompile Include="core\model\quad\quad_buffer.cpp" />
-    <ClCompile Include="core\model\std_image.cpp" />
+    <ClCompile Include="utility\std_image.cpp" />
     <ClCompile Include="core\model\texture.cpp" />
     <ClCompile Include="core\renderer\renderer.cpp" />
     <ClCompile Include="main.cpp" />
@@ -160,8 +164,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="shaders\basic.frag" />
-    <None Include="shaders\basic.vert" />
+    <None Include="shaders\material.frag" />
+    <None Include="shaders\material.vert" />
     <None Include="shaders\light.frag" />
     <None Include="shaders\light.vert" />
   </ItemGroup>
@@ -171,19 +175,22 @@
     <ClInclude Include="core\model\cube\cubebuffer.hpp" />
     <ClInclude Include="core\model\buffer\buffer.hpp" />
     <ClInclude Include="core\model\buffer\ibufferable.hpp" />
-    <ClInclude Include="core\model\mesh.hpp" />
-    <ClInclude Include="core\model\model.hpp" />
+    <ClInclude Include="core\model\assimp_model\mesh.hpp" />
+    <ClInclude Include="core\model\assimp_model\assimp_model.hpp" />
+    <ClInclude Include="core\model\imodel.hpp" />
     <ClInclude Include="core\model\pyramid\pyramid.hpp" />
     <ClInclude Include="core\model\pyramid\pyramid_buffer.hpp" />
     <ClInclude Include="core\model\quad\quad.hpp" />
     <ClInclude Include="core\model\quad\quad_buffer.hpp" />
-    <ClInclude Include="core\model\stb_image.hpp" />
+    <ClInclude Include="settings.hpp" />
+    <ClInclude Include="state.hpp" />
+    <ClInclude Include="utility\stb_image.hpp" />
     <ClInclude Include="core\model\texture.hpp" />
     <ClInclude Include="core\model\vertex.hpp" />
-    <ClInclude Include="core\renderer\irenderable.hpp" />
-    <ClInclude Include="core\renderer\material.hpp" />
+    <ClInclude Include="core\model\material.hpp" />
     <ClInclude Include="core\renderer\renderer.hpp" />
     <ClInclude Include="core\shader.hpp" />
+    <ClInclude Include="window.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

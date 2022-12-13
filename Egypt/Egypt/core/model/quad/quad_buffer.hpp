@@ -1,17 +1,20 @@
 #pragma once
 
-#include "../buffer/ibufferable.hpp"
 #include <vector>
-
+#include "../buffer/ibufferable.hpp"
 #include "../texture.hpp"
 
-class QuadBuffer : public IBufferable {
-public:
-    QuadBuffer();
+namespace Core {
 
-    virtual std::vector<Vertex> GetVertices();
-    virtual unsigned GetVertexCount();
+    class QuadBuffer : public IBufferable {
+    public:
+        QuadBuffer();
 
-private:
-    static std::vector<Vertex> m_Vertices;
-};
+        virtual std::vector<Vertex> GetVertices();
+        virtual unsigned GetVertexCount();
+
+    private:
+        static std::vector<Vertex> m_Vertices;
+    };
+
+}
