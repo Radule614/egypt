@@ -21,20 +21,20 @@ int main() {
     Core::OrbitalCamera* Camera = State.m_Camera;
     Core::Renderer* Renderer = State.m_Renderer;
 
-    Shader MaterialShader("shaders/material.vert", "shaders/material.frag");
-    Shader LightShader("shaders/light.vert", "shaders/light.frag");
+    Core::Shader MaterialShader("shaders/material.vert", "shaders/material.frag");
+    Core::Shader LightShader("shaders/light.vert", "shaders/light.frag");
 
     Core::Cube LightModel;
-
-    Core::Model Carpet("assets/carpet/carpet.obj");
-    Core::Model Sphere("assets/sphere/sphere.obj");
-    Core::Model Skull("assets/skull/skull.obj");
-
     Core::Material PyrMaterial = { glm::vec3(0.04f, 0.04f, 0.1f), glm::vec3(0.6f, 0.6f, 0.3f), glm::vec3(0.3f, 0.3f, 0.2f), 128.0f };
     Core::Material SandMaterial = { glm::vec3(0.04f, 0.04f, 0.0f), glm::vec3(0.4f, 0.4f, 0.2f), glm::vec3(0.3f, 0.3f, 0.2f), 128.0f };
 
     Renderer->m_PyramidMaterial = PyrMaterial;
     Renderer->m_SandMaterial = SandMaterial;
+
+    Core::Model Carpet("assets/carpet/carpet.obj");
+    Core::Model Sphere("assets/sphere/sphere.obj");
+    Core::Model Skull("assets/skull/skull.obj");
+    Core::Model Giant("assets/giant/Stone.obj");
     
     float RenderDistance = 300.0f;
     glm::mat4 ModelMatrix(1.0f);
@@ -48,7 +48,8 @@ int main() {
         { glm::vec3(-40.0f, 20.0f, 12.0f), glm::vec3(1.0f, 0.2f, 0.0f) },
         { glm::vec3(-25.0f, 5.5f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f) },
         { glm::vec3(-25.0f, 5.5f, 20.0f), glm::vec3(0.8f, 0.4f, 1.0f) },
-        { glm::vec3(-31.0f, 5.5f, -32.0f), glm::vec3(0.2f, 0.7f, 1.0f) }
+        { glm::vec3(-31.0f, 5.5f, -32.0f), glm::vec3(0.2f, 0.7f, 1.0f) },
+        { glm::vec3(12.0f, 5.5f, -17.0f), glm::vec3(1.0f, 0.4f, 0.0f) }
     };
 
     glUseProgram(MaterialShader.GetId());
@@ -108,6 +109,12 @@ int main() {
         Carpet.Render(MaterialShader);
         ModelMatrix = glm::translate(ModelMatrix, glm::vec3(Carpet_X, 4.0f + 0.6 * sin(AnimationFrame), Carpet_Z));
         Skull.Render(MaterialShader);
+
+        ModelMatrix = glm::mat4(1.0f);
+        ModelMatrix = glm::translate(ModelMatrix, glm::vec3(20.0f, 0.0f, -15.0f));
+        ModelMatrix = glm::rotate(ModelMatrix, glm::radians(-25.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        MaterialShader.SetModel(ModelMatrix);
+        Giant.Render(MaterialShader);
         
         for (int i = 0; i < PointLights.size(); i++)
             Renderer->RenderPointLight(Skull, PointLights[i], MaterialShader, i * 60 + PointLightAngle);

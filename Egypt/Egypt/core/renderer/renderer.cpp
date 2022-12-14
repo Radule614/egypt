@@ -39,9 +39,9 @@ void Core::Renderer::RenderGround(Shader& shader)
 void Core::Renderer::RenderMoon(Core::Model& model, DirectionalLight& light, Shader& shader, OrbitalCamera* camera)
 {
     glm::mat4 ModelMatrix = glm::mat4(1.0f);
-    ModelMatrix = glm::translate(ModelMatrix, -50.0f * light.direction);
+    ModelMatrix = glm::translate(ModelMatrix, -200.0f * light.direction);
     ModelMatrix = glm::translate(ModelMatrix, camera->m_Position);
-    ModelMatrix = glm::scale(ModelMatrix, glm::vec3(1.3f));
+    ModelMatrix = glm::scale(ModelMatrix, glm::vec3(5.3f));
     shader.SetVec3("lightColor", glm::vec3(0.35f, 0.45f, 0.64f));
     shader.SetModel(ModelMatrix);
     model.Render(shader);
