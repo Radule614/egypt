@@ -54,8 +54,6 @@ void Core::Buffer::AddNormalMap(std::string path)
 void Core::Buffer::Render(Shader& shader) {
     glUseProgram(shader.GetId());
     BindTextures(shader);
-    shader.SetInt("useTexture", 1);
-    shader.SetInt("useNormalMap", 1);
     shader.SetModel(m_ModelMatrix);
     glBindVertexArray(m_VAO);
     if (m_IndexCount) {

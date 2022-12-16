@@ -2,22 +2,12 @@
 
 #define NR_POINT_LIGHTS 7
 
-in vertex_out {
-	vec3 FragNormal;
-    vec3 FragPos;
-    vec2 FragTexCoords;
-    mat3 TBN;
-} FragmentIn;
-
-out vec4 FragColour;
-
 struct Material {
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
     float shininess;
-}; 
-uniform Material material;
+};
 
 struct PointLight {
     vec3 position;
@@ -28,7 +18,6 @@ struct PointLight {
     float linear;
     float quadratic;
 };
-uniform PointLight pointLights[NR_POINT_LIGHTS];
 
 struct DirectionalLight {
     vec3 direction;
@@ -36,7 +25,20 @@ struct DirectionalLight {
     vec3 diffuse;
     vec3 specular;
 };
+
+in vertex_out {
+	vec3 FragNormal;
+    vec3 FragPos;
+    vec2 FragTexCoords;
+    mat3 TBN;
+} FragmentIn;
+
+out vec4 FragColour;
+
+uniform Material material;
+uniform PointLight pointLights[NR_POINT_LIGHTS];
 uniform DirectionalLight directionalLight;
+uniform vec3 cameraPos;
 
 uniform sampler2D texture_diffuse1;
 uniform sampler2D texture_diffuse2;
@@ -45,10 +47,6 @@ uniform sampler2D texture_specular1;
 uniform sampler2D texture_specular2;
 uniform sampler2D texture_normal1;
 uniform sampler2D texture_normal2;
-
-uniform vec3 cameraPos;
-uniform bool useTexture;
-uniform bool useNormalMap;
 
 vec3 calculateDirectionalLight(DirectionalLight light, Material mat, vec3 normal, vec3 viewDir) {
     vec3 norm = normalize(normal);
@@ -89,20 +87,15 @@ vec3 calculatePointlight(PointLight light, Material mat, vec3 fragPos, vec3 norm
 void main() {
     vec3 viewDir = normalize(cameraPos - FragmentIn.FragPos);
     Material mat = material;
-
-    if(useTexture) {
-        mat.diffuse = vec3(texture(texture_diffuse1, FragmentIn.FragTexCoords));
-        mat.ambient = 0.03 * mat.diffuse;
-        mat.specular = vec3(texture(texture_specular1, FragmentIn.FragTexCoords));
-        mat.shininess = 128.0;
-    }
-
-    vec3 normal = FragmentIn.FragNormal;
-    if(useNormalMap){
-        normal = vec3(texture(texture_normal1, FragmentIn.FragTexCoords));
-        normal = normal * 2.0 - 1.0;  
-        normal = normalize(FragmentIn.TBN * normal); 
-    }
+   
+    mat.diffuse = vec3(texture(texture_diffuse1, FragmentIn.FragTexCoords));
+    mat.ambient = 0.03 * mat.diffuse;
+    mat.specular = vec3(texture(texture_specular1, FragmentIn.FragTexCoords));
+    mat.shininess = 128.0;
+    
+    vec3 normal = vec3(texture(texture_normal1, FragmentIn.FragTexCoords));
+    normal = normal * 2.0 - 1.0;  
+    normal = normalize(FragmentIn.TBN * normal); 
 
     vec3 color = calculateDirectionalLight(directionalLight, mat, normal, viewDir);
     for(int i = 0; i < NR_POINT_LIGHTS; i++)

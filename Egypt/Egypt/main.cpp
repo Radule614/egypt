@@ -21,9 +21,6 @@ int main() {
     Core::OrbitalCamera* Camera = State.m_Camera;
     Core::Renderer* Renderer = State.m_Renderer;
 
-    Core::Shader MaterialShader("shaders/material.vert", "shaders/material.frag");
-    Core::Shader LightShader("shaders/light.vert", "shaders/light.frag");
-
     Core::Cube LightModel;
     Core::Material PyrMaterial = { glm::vec3(0.04f, 0.04f, 0.1f), glm::vec3(0.6f, 0.6f, 0.3f), glm::vec3(0.3f, 0.3f, 0.2f), 128.0f };
     Core::Material SandMaterial = { glm::vec3(0.04f, 0.04f, 0.0f), glm::vec3(0.4f, 0.4f, 0.2f), glm::vec3(0.3f, 0.3f, 0.2f), 128.0f };
@@ -51,6 +48,9 @@ int main() {
         { glm::vec3(-31.0f, 5.5f, -32.0f), glm::vec3(0.2f, 0.7f, 1.0f) },
         { glm::vec3(12.0f, 5.5f, -17.0f), glm::vec3(1.0f, 0.4f, 0.0f) }
     };
+
+    Core::Shader MaterialShader("shaders/material.vert", "shaders/material.frag");
+    Core::Shader LightShader("shaders/light.vert", "shaders/light.frag");
 
     glUseProgram(MaterialShader.GetId());
     MaterialShader.SetProjection(Perspective);
