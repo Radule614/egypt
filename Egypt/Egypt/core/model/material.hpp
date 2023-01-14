@@ -50,4 +50,29 @@ namespace Core {
 		glm::vec3 specular;
 	};
 
+	struct SpotLight {
+		glm::vec3 direction;
+		glm::vec3 position;
+		glm::vec3 ambient;
+		glm::vec3 diffuse;
+		glm::vec3 specular;
+		float cutOff;
+		float outerCutOff;
+		float constant;
+		float linear;
+		float quadratic;
+
+		SpotLight(glm::vec3 pos, glm::vec3 dir) {
+			position = pos;
+			direction = dir;
+			ambient = glm::vec3(0.0f);
+			diffuse = glm::vec3(0.6f, 0.0f, 0.0f);
+			specular = glm::vec3(1.0f, 0.0f, 0.0f);
+			cutOff = glm::cos(glm::radians(6.0f));
+			outerCutOff = glm::cos(glm::radians(9.0f));
+			constant = 0;
+			linear = 0.009f;
+			quadratic = 0;
+		}
+	};
 }

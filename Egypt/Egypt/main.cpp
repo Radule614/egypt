@@ -39,6 +39,7 @@ int main() {
     glm::mat4 Perspective = glm::perspective(45.0f, Renderer->m_FramebufferSize.x / (float)Renderer->m_FramebufferSize.y, 0.1f, RenderDistance);
 
     Core::DirectionalLight MoonLight = { glm::normalize(glm::vec3(-1.0f, -0.3f, 0.5f)), glm::vec3(0.001f, 0.001f, 0.002f), glm::vec3(0.03f, 0.03f, 0.05f), glm::vec3(0.04f, 0.04f, 0.2f) };
+    Core::SpotLight SpotLight(glm::vec3(0.0f, 5.0f, 0.0), glm::vec3(0.0f, -1.0f, 0.0f));
     std::vector<Core::PointLight> PointLights {
         { glm::vec3(25.0f, 5.5f, -8.0f), glm::vec3(1.0f, 1.0f, 0.0f) },
         { glm::vec3(-50.0f, 6.5f, -12.0f), glm::vec3(0.4f, 1.0f, 0.0f) },
@@ -46,7 +47,8 @@ int main() {
         { glm::vec3(-25.0f, 5.5f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f) },
         { glm::vec3(-25.0f, 5.5f, 20.0f), glm::vec3(0.8f, 0.4f, 1.0f) },
         { glm::vec3(-31.0f, 5.5f, -32.0f), glm::vec3(0.2f, 0.7f, 1.0f) },
-        { glm::vec3(12.0f, 5.5f, -17.0f), glm::vec3(1.0f, 0.4f, 0.0f) }
+        { glm::vec3(12.0f, 5.5f, -17.0f), glm::vec3(1.0f, 0.4f, 0.0f) },
+        { glm::vec3(26.0f, 25.0f, 24.0f), glm::vec3(1.0f, 0.0f, 0.0f) },
     };
 
     Core::Shader MaterialShader("shaders/material.vert", "shaders/material.frag");
@@ -93,21 +95,32 @@ int main() {
         FreeView = glm::lookAt(Camera->m_Position, Camera->m_Position + Camera->m_Front, Camera->m_Up);
         MaterialShader.SetView(FreeView);
         MaterialShader.SetVec3("cameraPos", Camera->m_Position);
+        glm::vec3 CarpetPosition = glm::vec3(Carpet_X, 2.0f + 0.6 * sin(AnimationFrame), Carpet_Z);
+        SpotLight.position = glm::vec3(26.0f, 25.0f, 24.0f);
+        SpotLight.direction = CarpetPosition - SpotLight.position;
+        MaterialShader.SetSpotLight("spotLight", SpotLight);
+
+        glUseProgram(LightShader.GetId());
+        ModelMatrix = glm::mat4(1.0f);
+        ModelMatrix = glm::translate(ModelMatrix, SpotLight.position);
+        LightShader.SetModel(ModelMatrix);
+        LightShader.SetVec3("lightColor", glm::vec3(1.0f, 0.0f, 0.0f));
+
+        Sphere.Render(LightShader);
 
         Renderer->RenderPyramid(MaterialShader, glm::vec3(30.0f, 0.0f, -32.0f), glm::vec3(36.0f), -25.0f);
         Renderer->RenderPyramid(MaterialShader, glm::vec3(26.0f, 0.0f, 24.0f), glm::vec3(35.0f), 45.0f);
         Renderer->RenderPyramid(MaterialShader, glm::vec3(-40.0f, 0.0f, 12.0f), glm::vec3(29.0f));
         Renderer->RenderPyramid(MaterialShader, glm::vec3(-45.0f, 0.0f, -44.0f), glm::vec3(35.0f), 117.0f);
         Renderer->RenderPyramid(MaterialShader, glm::vec3(-40.0f, 0.0f, 52.0f), glm::vec3(17.0f), 231.0f);
-
-        Renderer->RenderGround(MaterialShader);
         
+        Renderer->RenderGround(MaterialShader);
+
         glUseProgram(MaterialShader.GetId());
         ModelMatrix = glm::mat4(1.0f);
-        ModelMatrix = glm::translate(ModelMatrix, glm::vec3(Carpet_X, 2.0f + 0.6 * sin(AnimationFrame), Carpet_Z));
+        ModelMatrix = glm::translate(ModelMatrix, CarpetPosition);
         MaterialShader.SetModel(ModelMatrix);
         Carpet.Render(MaterialShader);
-        ModelMatrix = glm::translate(ModelMatrix, glm::vec3(Carpet_X, 4.0f + 0.6 * sin(AnimationFrame), Carpet_Z));
         Skull.Render(MaterialShader);
 
         ModelMatrix = glm::mat4(1.0f);
@@ -116,8 +129,13 @@ int main() {
         MaterialShader.SetModel(ModelMatrix);
         Giant.Render(MaterialShader);
         
-        for (int i = 0; i < PointLights.size(); i++)
+        for (int i = 0; i < PointLights.size() - 1; i++) {
+            MaterialShader.SetVec3("pointLights[" + std::to_string(i) + "].ambient", PointLights[i].ambient * (float)(glm::sin(i * 60 + PointLightAngle * 0.01) + 1) / 2.0f);
+            MaterialShader.SetVec3("pointLights[" + std::to_string(i) + "].diffuse", PointLights[i].diffuse * (float)(glm::sin(i * 60 + PointLightAngle * 0.01) + 1) / 2.0f);
+            MaterialShader.SetVec3("pointLights[" + std::to_string(i) + "].specular", PointLights[i].specular * (float)(glm::sin(i * 60 + PointLightAngle * 0.01) + 1) / 2.0f);
             Renderer->RenderPointLight(Skull, PointLights[i], MaterialShader, i * 60 + PointLightAngle);
+        }
+        MaterialShader.SetPointLight("pointLights[7]", PointLights[7]);
 
         glUseProgram(LightShader.GetId());
         LightShader.SetView(FreeView);

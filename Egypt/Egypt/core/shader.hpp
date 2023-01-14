@@ -26,9 +26,10 @@ namespace Core {
         void SetFloat(const std::string&, float) const;
         void SetInt(const std::string&, int) const;
 
-        void SetMaterial(const std::string&, Core::Material) const;
-        void SetPointLight(const std::string&, Core::PointLight) const;
-        void SetDirectionalLight(const std::string&, Core::DirectionalLight) const;
+        void SetMaterial(const std::string&, Core::Material&) const;
+        void SetPointLight(const std::string&, Core::PointLight&) const;
+        void SetDirectionalLight(const std::string&, Core::DirectionalLight&) const;
+        void SetSpotLight(const std::string&, Core::SpotLight&) const;
     private:
         unsigned m_Id;
         unsigned loadAndCompileShader(std::string filename, GLuint shaderType);

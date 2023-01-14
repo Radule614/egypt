@@ -39,13 +39,13 @@ void Core::Shader::SetInt(const std::string& uniform, int i) const
     glUniform1i(glGetUniformLocation(m_Id, uniform.c_str()), i);
 }
 
-void Core::Shader::SetMaterial(const std::string& uniform, Core::Material material) const {
+void Core::Shader::SetMaterial(const std::string& uniform, Core::Material& material) const {
     SetVec3(uniform + ".ambient", material.ambient);
     SetVec3(uniform + ".diffuse", material.diffuse);
     SetVec3(uniform + ".specular", material.specular);
     SetFloat(uniform + ".shininess", material.shininess);
 }
-void Core::Shader::SetPointLight(const std::string& uniform, Core::PointLight light) const {
+void Core::Shader::SetPointLight(const std::string& uniform, Core::PointLight& light) const {
     SetVec3(uniform + ".position", light.position);
     SetVec3(uniform + ".ambient", light.ambient);
     SetVec3(uniform + ".diffuse", light.diffuse);
@@ -55,11 +55,24 @@ void Core::Shader::SetPointLight(const std::string& uniform, Core::PointLight li
     SetFloat(uniform + ".quadratic", light.quadratic);
 }
 
-void Core::Shader::SetDirectionalLight(const std::string& uniform, Core::DirectionalLight light) const {
+void Core::Shader::SetDirectionalLight(const std::string& uniform, Core::DirectionalLight& light) const {
     SetVec3(uniform + ".direction", light.direction);
     SetVec3(uniform + ".ambient", light.ambient);
     SetVec3(uniform + ".diffuse", light.diffuse);
     SetVec3(uniform + ".specular", light.specular);
+}
+
+void Core::Shader::SetSpotLight(const std::string& uniform, Core::SpotLight& light) const {
+    SetVec3(uniform + ".direction", light.direction);
+    SetVec3(uniform + ".position", light.position);
+    SetVec3(uniform + ".ambient", light.ambient);
+    SetVec3(uniform + ".diffuse", light.diffuse);
+    SetVec3(uniform + ".specular", light.specular);
+    SetFloat(uniform + ".cutOff", light.cutOff);
+    SetFloat(uniform + ".outerCutOff", light.outerCutOff);
+    SetFloat(uniform + ".constant", light.constant);
+    SetFloat(uniform + ".linear", light.linear);
+    SetFloat(uniform + ".quadratic", light.quadratic);
 }
 
 unsigned Core::Shader::GetId() const {
