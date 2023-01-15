@@ -62,14 +62,14 @@ namespace Core {
 		float linear;
 		float quadratic;
 
-		SpotLight(glm::vec3 pos, glm::vec3 dir) {
+		SpotLight(glm::vec3 pos, glm::vec3 dir, glm::vec3 dif, glm::vec3 spec) {
 			position = pos;
 			direction = dir;
 			ambient = glm::vec3(0.0f);
-			diffuse = glm::vec3(0.6f, 0.0f, 0.0f);
-			specular = glm::vec3(1.0f, 0.0f, 0.0f);
-			cutOff = glm::cos(glm::radians(6.0f));
-			outerCutOff = glm::cos(glm::radians(9.0f));
+			diffuse = dif;
+			specular = spec;
+			cutOff = glm::cos(glm::radians(3.0f));
+			outerCutOff = glm::cos(glm::radians(5.0f));
 			constant = 0;
 			linear = 0.009f;
 			quadratic = 0;

@@ -17,9 +17,6 @@ namespace Core {
         Core::Pyramid m_PyramidModel;
         Core::Quad m_GroundModel;
 
-        Core::Material m_PyramidMaterial;
-        Core::Material m_SandMaterial;
-
         void RenderPointLight(Core::Model& model, PointLight& light, Shader& shader, float angle = 0.0f);
         void RenderPyramid(Shader& shader, glm::vec3 position, glm::vec3 scale, float angle = 0.0f);
         void RenderGround(Shader& shader);

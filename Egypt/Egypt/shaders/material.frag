@@ -1,6 +1,7 @@
 #version 330 core
 
 #define NR_POINT_LIGHTS 8
+#define NR_SPOT_LIGHTS 4
 
 struct Material {
     vec3 ambient;
@@ -51,7 +52,7 @@ out vec4 FragColour;
 uniform Material material;
 uniform PointLight pointLights[NR_POINT_LIGHTS];
 uniform DirectionalLight directionalLight;
-uniform SpotLight spotLight;
+uniform SpotLight spotLights[NR_SPOT_LIGHTS];
 uniform vec3 cameraPos;
 
 uniform sampler2D texture_diffuse1;
@@ -131,7 +132,7 @@ void main() {
     Material mat = material;
    
     mat.diffuse = vec3(texture(texture_diffuse1, FragmentIn.FragTexCoords));
-    mat.ambient = 0.03 * mat.diffuse;
+    mat.ambient = 0.005 * mat.diffuse;
     mat.specular = vec3(texture(texture_specular1, FragmentIn.FragTexCoords));
     mat.shininess = 128.0;
     
@@ -142,7 +143,8 @@ void main() {
     vec3 color = calculateDirectionalLight(directionalLight, mat, normal, viewDir);
     for(int i = 0; i < NR_POINT_LIGHTS; i++)
         color += calculatePointlight(pointLights[i], mat, FragmentIn.FragPos, normal, viewDir);
-    color += calculateSpotLight(spotLight, mat, FragmentIn.FragPos, normal, viewDir);
+    for(int i = 0; i < NR_SPOT_LIGHTS; i++)
+        color += calculateSpotLight(spotLights[i], mat, FragmentIn.FragPos, normal, viewDir);
 
     float gamma = 2.2;
     FragColour = vec4(pow(color, vec3(1.0/gamma)), 1.0);

@@ -16,7 +16,6 @@ void Core::Renderer::RenderPointLight(Core::Model& model, PointLight& light, Sha
 
 void Core::Renderer::RenderPyramid(Shader& shader, glm::vec3 position, glm::vec3 scale, float angle) {
     glUseProgram(shader.GetId());
-    shader.SetMaterial("material", m_PyramidMaterial);
     glm::mat4 ModelMatrix = glm::mat4(1.0f);
     ModelMatrix = glm::translate(ModelMatrix, position);
     if(angle != 0)
@@ -29,9 +28,8 @@ void Core::Renderer::RenderPyramid(Shader& shader, glm::vec3 position, glm::vec3
 
 void Core::Renderer::RenderGround(Shader& shader)
 {
-    shader.SetMaterial("material", m_SandMaterial);
     glm::mat4 ModelMatrix = glm::mat4(1.0f);
-    ModelMatrix = glm::scale(ModelMatrix, glm::vec3(150.0f, 1.0f, 150.0f));
+    ModelMatrix = glm::scale(ModelMatrix, glm::vec3(200.0f, 1.0f, 200.0f));
     m_GroundModel.SetModelMatrix(ModelMatrix);
     m_GroundModel.Render(shader);
 }

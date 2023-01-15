@@ -18,5 +18,5 @@ namespace Core {
 
     unsigned int LoadTextureFromFile(const std::string& fullpath);
     unsigned int LoadTextureFromFile(const std::string& path, const std::string& directory);
-
+    unsigned int LoadCubemap(std::vector<std::string> faces);
 }

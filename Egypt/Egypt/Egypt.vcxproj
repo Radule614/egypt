@@ -156,11 +156,13 @@
     <ClCompile Include="core\model\pyramid\pyramid_buffer.cpp" />
     <ClCompile Include="core\model\quad\quad.cpp" />
     <ClCompile Include="core\model\quad\quad_buffer.cpp" />
+    <ClCompile Include="core\skybox\skybox.cpp" />
     <ClCompile Include="utility\std_image.cpp" />
     <ClCompile Include="core\model\texture.cpp" />
     <ClCompile Include="core\renderer\renderer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="core\shader.cpp" />
+    <ClCompile Include="utility\utility.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -168,6 +170,8 @@
     <None Include="shaders\material.vert" />
     <None Include="shaders\light.frag" />
     <None Include="shaders\light.vert" />
+    <None Include="shaders\skybox.frag" />
+    <None Include="shaders\skybox.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\camera\camera.hpp" />
@@ -182,6 +186,7 @@
     <ClInclude Include="core\model\pyramid\pyramid_buffer.hpp" />
     <ClInclude Include="core\model\quad\quad.hpp" />
     <ClInclude Include="core\model\quad\quad_buffer.hpp" />
+    <ClInclude Include="core\skybox\skybox.hpp" />
     <ClInclude Include="settings.hpp" />
     <ClInclude Include="state.hpp" />
     <ClInclude Include="utility\stb_image.hpp" />
@@ -190,6 +195,7 @@
     <ClInclude Include="core\model\material.hpp" />
     <ClInclude Include="core\renderer\renderer.hpp" />
     <ClInclude Include="core\shader.hpp" />
+    <ClInclude Include="utility\utility.hpp" />
     <ClInclude Include="window.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
