@@ -28,7 +28,7 @@ namespace Core {
 			specular = color;
 			constant = 0.005f;
 			linear = 0.005f;
-			quadratic = 0.02f;
+			quadratic = 0.012f;
 		}
 
 		PointLight(glm::vec3 pos, glm::vec3 a, glm::vec3 d, glm::vec3 s, float x, float y, float z) {
@@ -68,8 +68,8 @@ namespace Core {
 			ambient = glm::vec3(0.0f);
 			diffuse = dif;
 			specular = spec;
-			cutOff = glm::cos(glm::radians(3.0f));
-			outerCutOff = glm::cos(glm::radians(5.0f));
+			cutOff = glm::cos(glm::radians(2.0f));
+			outerCutOff = glm::cos(glm::radians(3.0f));
 			constant = 0;
 			linear = 0.009f;
 			quadratic = 0;

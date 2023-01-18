@@ -96,10 +96,10 @@ std::vector<Core::Texture> Core::Model::loadMaterialTextures(aiMaterial* mat, ai
         aiString str;
         mat->GetTexture(type, i, &str);
         bool skip = false;
-        
+        string fullPath = directory + "/" + str.C_Str();
         for (unsigned int j = 0; j < LoadedTextures.size(); j++)
         {
-            if (std::strcmp(LoadedTextures[j].path.data(), str.C_Str()) == 0)
+            if (std::strcmp(LoadedTextures[j].path.data(), fullPath.c_str()) == 0)
             {
                 textures.push_back(LoadedTextures[j]);
                 skip = true;
@@ -109,9 +109,9 @@ std::vector<Core::Texture> Core::Model::loadMaterialTextures(aiMaterial* mat, ai
         if (!skip)
         {
             Texture texture;
-            texture.id = LoadTextureFromFile(str.C_Str(), directory);
+            texture.id = LoadTextureFromFile(fullPath);
             texture.type = typeName;
-            texture.path = str.C_Str();
+            texture.path = fullPath;
             textures.push_back(texture);
             LoadedTextures.push_back(texture);
         }

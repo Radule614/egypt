@@ -50,12 +50,12 @@ Core::Skybox::Skybox(Core::Shader& skyboxShader) : m_Shader(skyboxShader)
 {
     std::vector<std::string> faces
     {
-        "assets/skybox/right.jpg",
-        "assets/skybox/left.jpg",
-        "assets/skybox/top.jpg",
-        "assets/skybox/bottom.jpg",
-        "assets/skybox/front.jpg",
-        "assets/skybox/back.jpg"
+        "assets/skybox/px.jpg",
+        "assets/skybox/nx.jpg",
+        "assets/skybox/py.jpg",
+        "assets/skybox/ny.jpg",
+        "assets/skybox/pz.jpg",
+        "assets/skybox/nz.jpg"
     };
 
     m_CubemapTexture = Core::LoadCubemap(faces);
@@ -75,17 +75,6 @@ Core::Skybox::Skybox(Core::Shader& skyboxShader) : m_Shader(skyboxShader)
 
 void Core::Skybox::Render()
 {
-    /*
-    glDepthMask(GL_FALSE);
-    glUseProgram(m_Shader.GetId());
-    glBindVertexArray(m_VAO);
-    //m_Shader.SetInt("skybox", m_CubemapTexture);
-    glBindTexture(GL_TEXTURE_CUBE_MAP, m_CubemapTexture);
-    glDrawArrays(GL_TRIANGLES, 0, 36);
-    glDepthMask(GL_TRUE);
-    */
-
-    
     glDepthFunc(GL_LEQUAL);
     glUseProgram(m_Shader.GetId());
     glBindVertexArray(m_VAO);

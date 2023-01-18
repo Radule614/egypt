@@ -23,10 +23,11 @@ int main() {
     Core::OrbitalCamera* Camera = State.m_Camera;
     Core::Renderer* Renderer = State.m_Renderer;
 
+    Core::Model Giant("assets/giant/giant.obj");
+    Core::Model Moon("assets/moon/moon.obj");
+    Core::Model Skull("assets/skull/skull.obj");
     Core::Model Carpet("assets/carpet/carpet.obj");
     Core::Model Sphere("assets/sphere/sphere.obj");
-    Core::Model Skull("assets/skull/skull.obj");
-    Core::Model Giant("assets/giant/Stone.obj");
     
     float RenderDistance = 400.0f;
     glm::mat4 ModelMatrix(1.0f);
@@ -38,7 +39,7 @@ int main() {
         { glm::vec3(-40.0f, 19.0f, 12.0f), Utility::FromRGB(255, 255, 0) },
         { glm::vec3(30.0f, 23.0f, -32.0f), Utility::FromRGB(0, 255, 255) },
         { glm::vec3(-45.0f, 23.0f, -44.0f), Utility::FromRGB(255, 0, 255) },
-        { glm::vec3(26.0f, 25.0f, 24.0f), Utility::FromRGB(255, 255, 255) },
+        { glm::vec3(26.0f, 23.5f, 24.0f), Utility::FromRGB(255, 255, 255) },
         { glm::vec3(25.0f, 5.5f, -8.0f), Utility::FromRGB(255, 50, 0) },
         { glm::vec3(-50.0f, 6.5f, -12.0f), Utility::FromRGB(100, 255, 0) },
         { glm::vec3(-31.0f, 5.5f, -32.0f), Utility::FromRGB(50, 180, 255) },
@@ -50,7 +51,7 @@ int main() {
         SpotLights.push_back(Core::SpotLight(PointLights[i].position, glm::vec3(0), 0.6f * PointLights[i].diffuse, PointLights[i].diffuse));
     
     Core::Shader MaterialShader("shaders/material.vert", "shaders/material.frag");
-    Core::Shader LightShader("shaders/light.vert", "shaders/light.frag");
+    Core::Shader MoonShader("shaders/moon.vert", "shaders/moon.frag");
     Core::Shader SkyboxShader("shaders/skybox.vert", "shaders/skybox.frag");
 
     Core::Skybox Skybox(SkyboxShader);
@@ -63,8 +64,8 @@ int main() {
     for (int i = 0; i < SpotLights.size(); i++)
         MaterialShader.SetSpotLight("spotLights[" + std::to_string(i) + "]", SpotLights[i]);
 
-    glUseProgram(LightShader.GetId());
-    LightShader.SetProjection(Perspective);
+    glUseProgram(MoonShader.GetId());
+    MoonShader.SetProjection(Perspective);
     glUseProgram(SkyboxShader.GetId());
     SkyboxShader.SetProjection(Perspective);
     
@@ -132,6 +133,11 @@ int main() {
         ModelMatrix = glm::rotate(ModelMatrix, glm::radians(-25.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         MaterialShader.SetModel(ModelMatrix);
         Giant.Render(MaterialShader);
+        ModelMatrix = glm::mat4(1.0f);
+        ModelMatrix = glm::translate(ModelMatrix, glm::vec3(-32.0f, 0.0f, 45.0f));
+        ModelMatrix = glm::rotate(ModelMatrix, glm::radians(140.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        MaterialShader.SetModel(ModelMatrix);
+        Giant.Render(MaterialShader);
         
         float val = (float)(glm::cos(PulseFrame * 0.01) + 1) / 2.0f;
         for (int i = 0; i < PointLights.size(); i++) {
@@ -150,9 +156,9 @@ int main() {
             }
         }
 
-        glUseProgram(LightShader.GetId());
-        LightShader.SetView(FreeView);
-        Renderer->RenderMoon(Sphere, MoonLight, LightShader, Camera);
+        glUseProgram(MoonShader.GetId());
+        MoonShader.SetView(FreeView);
+        Renderer->RenderMoon(Moon, MoonLight, MoonShader, Camera);
 
         glUseProgram(SkyboxShader.GetId());
         SkyboxShader.SetView(glm::mat4(glm::mat3(FreeView)));

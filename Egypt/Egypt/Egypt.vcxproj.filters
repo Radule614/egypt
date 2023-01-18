@@ -77,8 +77,8 @@
     <None Include="packages.config" />
     <None Include="shaders\material.vert" />
     <None Include="shaders\material.frag" />
-    <None Include="shaders\light.frag" />
-    <None Include="shaders\light.vert" />
+    <None Include="shaders\moon.frag" />
+    <None Include="shaders\moon.vert" />
     <None Include="shaders\skybox.frag" />
     <None Include="shaders\skybox.vert" />
   </ItemGroup>

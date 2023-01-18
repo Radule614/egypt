@@ -15,7 +15,9 @@ namespace Window {
             EngineState::State.PressedKeys[key] = false;
     }
 
-    static std::vector<int> NeededKeys = { GLFW_KEY_W, GLFW_KEY_S, GLFW_KEY_A, GLFW_KEY_D, GLFW_KEY_LEFT, GLFW_KEY_RIGHT, GLFW_KEY_UP, GLFW_KEY_DOWN, GLFW_KEY_R, GLFW_KEY_T };
+    static std::vector<int> NeededKeys = {
+        GLFW_KEY_W, GLFW_KEY_S, GLFW_KEY_A, GLFW_KEY_D, GLFW_KEY_LEFT, GLFW_KEY_RIGHT, GLFW_KEY_UP, GLFW_KEY_DOWN, GLFW_KEY_R, GLFW_KEY_T
+    };
 
     static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode) {
         if (key == GLFW_KEY_ESCAPE) glfwSetWindowShouldClose(window, GLFW_TRUE);

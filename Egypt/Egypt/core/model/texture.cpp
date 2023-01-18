@@ -10,9 +10,9 @@ unsigned int Core::LoadTextureFromFile(const std::string& fullpath) {
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
+    
     int width, height, nrChannels;
-    stbi_set_flip_vertically_on_load(true);
+    //stbi_set_flip_vertically_on_load(true);
     unsigned char* data = stbi_load((fullpath).c_str(), &width, &height, &nrChannels, 0);
     if (data)
     {
@@ -24,7 +24,7 @@ unsigned int Core::LoadTextureFromFile(const std::string& fullpath) {
         std::cout << "Failed to load texture" << std::endl;
     }
     stbi_image_free(data);
-    std::cout << fullpath << std::endl;
+    std::cout << "LOADED: " << fullpath << std::endl;
     return id;
 }
 
@@ -54,7 +54,7 @@ unsigned int Core::LoadCubemap(std::vector<std::string> faces)
                 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data
             );
             stbi_image_free(data);
-            std::cout << faces[i] << std::endl;
+            std::cout << "LOADED: " << faces[i] << std::endl;
         }
         else
         {

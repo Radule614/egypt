@@ -105,7 +105,7 @@ unsigned Core::Shader::loadAndCompileShader(std::string filename, GLuint shaderT
         return 0;
     }
 
-    std::cout << "Loaded " << filename << " shader" << std::endl;
+    std::cout << "LOADED: " << filename << std::endl;
 
     return ShaderID;
 }
