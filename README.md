@@ -4,6 +4,6 @@
   OpenGL university project which is meant to be a desert landscape with pyramids and moonlight.
 </p>
 
-![egypt_final](https://user-images.githubusercontent.com/78875131/209869218-b4794162-b458-4f6d-ad63-377ac9c263bd.jpg)
+![1](https://user-images.githubusercontent.com/78875131/213301027-24e3be47-7fae-4af8-a7a2-c6ef1b9c8ebe.png)
 
-![egypt_final_2](https://user-images.githubusercontent.com/78875131/209869227-b824584b-bc97-494b-9847-9e47ee5c48cd.jpg)
+![2](https://user-images.githubusercontent.com/78875131/213301036-2faec807-108f-4c0f-9fae-aef746d4f275.png)
